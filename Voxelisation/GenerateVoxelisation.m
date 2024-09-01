@@ -30,8 +30,6 @@ figure('Name','Task Space','units','normalized','outerposition',[0 0 1 1])
 
 grid on
 axis('image');
-%view([-45 45]);
-%view([-30 55]); %Best viewing angle of all four targets
 view([-30 28]); %Best viewing angle of all targets
 
 xlabel('X axis');
@@ -39,8 +37,6 @@ ylabel('Y axis');
 zlabel('Z axis');
 
 hold on 
-
-
 
 %% User defined Regions:
 

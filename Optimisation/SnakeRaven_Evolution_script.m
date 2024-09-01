@@ -30,15 +30,15 @@ disp(directory)
 addpath(directory);
 
 %% Anatomy Voxelization:
-Anatomyfilename = 'VoxelData26May2024goodfeeling.mat';
-% Anatomyfilename = 'VoxelDataMultiTarget.mat';
-% Anatomyfilename = 'VoxelDataTarget1_top.mat';
-% Anatomyfilename = 'VoxelDataTarget2_right.mat';
-% Anatomyfilename = 'VoxelDataTarget3_bottom.mat';
-% Anatomyfilename = 'VoxelDataTarget4_left.mat';
-%sample_size = 8*1e6; 
-sample_size = 5*1e5; %e5; % %10*1e6; %6  % must be larger than 9100*(18*9) orientation patches
-% must be larger than 1474200
+Anatomyfilename = 'VoxelData30Aug2024AM0653.mat';
+
+% VoxelData30Aug2024AM0653 : 4 target points on RHS spine model
+% VoxelData26May2024goodfeeling : Initial working voxelisation (Semester 1)
+%                                 Small patch test, goal cluster on RHS
+% VoxelData26May2024kneee : Original knee scan.
+
+% UPDATE: set to minimum x*1e5 (good enough for faster testing)
+sample_size = 5*1e1; % must be larger than 9100*(18*9) orientation patches
 
 disp('Using Anatomy file:')
 disp(Anatomyfilename)
@@ -58,11 +58,9 @@ nVar=3;            % Number of Decision Variables
 
 VarSize=[1 nVar];   % Decision Variables Matrix Size
 
-% % % % alpha n d bounds: [lower upper]
-% % % alpha_bounds = [0.01 pi/2];
-% % % n_bounds = [1 10];
-% % % d_bounds = [3, 10]%[1 10];
 
+
+w = 3; % Set width of SnakeRaven
 alpha_bounds = [0.01 pi/2];
 n_bounds = [1 10];%[3 7];
 d_bounds = [3, 10];%[1 10];
@@ -158,7 +156,7 @@ for i=1:nPop
     % Run the Fitness Function
     %disp(['Testing member ' num2str(i) ' of generation 0']);
     %disp('Evaluating design: ')
-    %disp(vector2designstruct(pop(i).Position))
+    %disp(vector2designstruct(pop(i).Position, w))
     
     
     %Check if the design has already been tested:
@@ -173,7 +171,7 @@ for i=1:nPop
         %Unique Design needs To be calculated
         func_iter = func_iter + 1;
         % % % % % % % % % % % % % tic
-        pop(i).Cost=-1*CostFunction(vector2designstruct(pop(i).Position));
+        pop(i).Cost=-1*CostFunction(vector2designstruct(pop(i).Position, w));
         toc
         pop(i).Time = toc;
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -238,7 +236,7 @@ for it=1:MaxIt
         % Run the Fitness Function
         disp(['Testing member ' num2str(i) ' of generation ' num2str(it)]);
         disp('Evaluating design: ')
-        disp(vector2designstruct(NewSol.Position))
+        disp(vector2designstruct(NewSol.Position, w))
 
         %Check if the design has already been tested:
         [was_tested, prior_cost, prior_time] = is_member_already_tested(NewSol.Position,Allpop,Allcost,Alltime);
@@ -252,7 +250,7 @@ for it=1:MaxIt
             %Unique Design needs To be calculated
             func_iter = func_iter + 1;
             tic
-            NewSol.Cost=-1*CostFunction(vector2designstruct(NewSol.Position));
+            NewSol.Cost=-1*CostFunction(vector2designstruct(NewSol.Position, w));
             toc
             NewSol.Time = toc;
         end           
@@ -303,7 +301,7 @@ delete(poolobj)
 
 %Closing Message:
 disp('Evolution time complete. The Best solution was:');
-disp(vector2designstruct(BestSol.Position))
+disp(vector2designstruct(BestSol.Position, w))
 disp('With best Dexterity:')
 disp(-1*BestSol.Cost)
 disp('\n');

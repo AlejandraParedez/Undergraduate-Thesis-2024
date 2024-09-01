@@ -26,7 +26,8 @@ segments = length(design.alpha);
 q_home = [deg2rad(-39.5967) deg2rad(-77.9160)]; % right home position
 %q_home = [deg2rad(39.5967) deg2rad(-102.084)]; % left home position
 
-%Raven Joints: Lower Upper
+% Raven Joints: Lower Upper
+% Edit this to control the position (allowed ranges) of the Raven.
 %x rotation
 qrxL = q_home(1) - pi/4; %radians was 0
 qrxU = q_home(1) + pi/4; %was pi/4

@@ -9,6 +9,7 @@ close all;
 addpath(pwd);
 %cd('Snake2_1_10_results')
 
+%  b 4 target model 
 
 % Single target, Small model
 %cd('Snake_Evolution_Results26-May-2024_14_07_33')' %1 a
@@ -23,7 +24,10 @@ addpath(pwd);
 % Single Param
 % cd('Snake_Evolution_Results30-Aug-alpha') % b
 % cd('Snake_Evolution_Results30-Aug-d') % b
-cd('Snake_Evolution_Results30-Aug-n') %b
+% cd('Snake_Evolution_Results30-Aug-n') %b
+
+% larger sample size model %b
+cd('Snake_Evolution_Results12-Sep-2024 01_14_21')
 
 tests_done = 1;
 max_iter = 100;
@@ -38,7 +42,10 @@ Snake = cell(tests_done,1);
 %Single Param (b)
 %Snake{1} = 'Snake_Evolution_Results30-Aug-2024_11_56_48 Finished_30-Aug-2024_12_01_00.mat'; % alpha
 %Snake{1} = 'Snake_Evolution_Results30-Aug-2024_10_16_57 Finished_30-Aug-2024_10_53_19.mat'; % d
-Snake{1} = 'Snake_Evolution_Results30-Aug-2024_12_05_01 Finished_30-Aug-2024_12_06_19.mat'; % n
+%Snake{1} = 'Snake_Evolution_Results30-Aug-2024_12_05_01 Finished_30-Aug-2024_12_06_19.mat'; % n
+
+% larger sample size model %b
+Snake{1} = 'Snake_Evolution_Results12-Sep-2024 01_14_21 Finished_12-Sep-2024_02_05_45.mat';
 
 
 % Primary Dataset

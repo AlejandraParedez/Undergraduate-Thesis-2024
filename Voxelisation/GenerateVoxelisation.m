@@ -7,19 +7,20 @@ clc
 clear all
 close all
 
-%% Load Anatomy
+% Load Anatomy
 tic
 %Load Anatomy
 Afile = 'AAA.stl';
 fv = stlread(Afile);
 
 %T = [Rx(deg2rad(33))*Ry(deg2rad(7))*Rz(deg2rad(5)) [-1 5 -42.5]'; 0 0 0 1];
-T = [Rx(deg2rad(180))*Ry(deg2rad(180))*Rz(deg2rad(90)) [25 3 -80]'; 0 0 0 1];
+T = [Rx(deg2rad(180))*Ry(deg2rad(180))*Rz(deg2rad(90)) [25 3 -80]'; 0 0 0 1]; % Set view/orientation for lumbar spine
+
 
 fv.vertices = TransformPoints(T,fv.vertices); 
 
 figure('Name','Task Space','units','normalized','outerposition',[0 0 1 1])
-% plot3(fv.vertices(:,1), fv.vertices(:,2), fv.vertices(:,3), '.');
+plot3(fv.vertices(:,1), fv.vertices(:,2), fv.vertices(:,3), '.');
 
 % patch(fv,'FaceColor',       [0.8 0.8 0.75], ...
 %          'EdgeColor',       'none',        ...
@@ -38,10 +39,13 @@ zlabel('Z axis');
 
 hold on 
 
-%% User defined Regions:
+% User defined Regions:
 
 %Entrance frame RCM is at Origin! plotcoord3(eye(4),10,'r','g','b')
 Entranceframe = [Rz(deg2rad(-90)) [0 -30 10]'; 0 0 0 1];
+
+Entranceframe = [Rz(deg2rad(-90)) [0 -30 15]'; 0 0 0 1]; % for easy testing
+
 plotcoord3(Entranceframe,10,'r','g','b')
 
 %Labelling the Goal Volume
@@ -52,8 +56,12 @@ plotcoord3(Entranceframe,10,'r','g','b')
 %               -27, 4,  8, 3.0, 2.0, 3.0;
 %               -32, 4, 15, 3.0, 2.0, 3.0]; % CHANGE
 
-% Single target # entire wall (single side)
-g_ori_dim = [-50, 3, -5, 40, 2, 25];
+% % Single target # entire wall (single side)
+% g_ori_dim = [-50, 3, -5, 40, 2, 25];
+
+% Single target Easy to reach (practically straight ahead) to gauge
+% dexterity measure
+g_ori_dim = [-10, -20, -5, 5, 30, 15];
 
 % Single target # entire wall  (both sides)
                
@@ -75,7 +83,12 @@ for ii = 1:NG
 end
 
 %Trocar space
-t_ori = [10-10-10, -25+25-3, -3]'; % [-25, -7, -5]';
+%Side entry
+%t_ori = [10-10-10, -25+25-3, -3]'; % [-25, -7, -5]';
+
+% easy Entry for 'easy Target' for testing
+t_ori = [10-10-10+10, -25+25-3, -3]'; % [-25, -7, -5]';
+
 t_dim = [10, 6, 6]; %[25, 12, 12]';
 t_xbounds = [t_ori(1) t_ori(1)+t_dim(1)];
 t_ybounds = [t_ori(2) t_ori(2)+t_dim(2)];

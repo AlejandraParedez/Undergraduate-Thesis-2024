@@ -45,8 +45,11 @@ disp('With best Dexterity:')
 disp(-1*V.BestSol.Cost)
 disp('\n');
 
+tiledlayout(2, 3)
+
 %Plot Line of Evolution Best cost over time
 figure;
+nexttile
 for ii = 1:tests_done
     Data = load(Snake{ii});
     plot(-1*Data.BestCost,'LineWidth', 2);
@@ -71,6 +74,7 @@ Upper_line = mean_fitness + sigma_fitness;
 Lower_line = mean_fitness - sigma_fitness;
 
 figure;
+nexttile
 generations = linspace(1,max_iter,max_iter)';
 plot(generations,Upper_line,'b-','LineWidth', 2); hold on;
 plot(generations,Lower_line,'b-','LineWidth', 2); hold on;
@@ -97,6 +101,7 @@ alpha_bounds = [0.01 pi/2];
 n_bounds = [1 10];
 d_bounds = [1 10];
 figure;
+nexttile
 if nVar==3
     %One Segment Design
     alpha = zeros(tests_done,1); n = zeros(tests_done,1); d = zeros(tests_done,1);

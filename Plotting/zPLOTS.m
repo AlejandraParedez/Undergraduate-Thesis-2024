@@ -55,6 +55,7 @@ V = load(Snake{1}); %best one that was printed!
 %Anatomyfilename = 'VoxelData26May2024goodfeeling.mat'; % a
 Anatomyfilename = 'VoxelData30Aug2024AM0653.mat'; % b
 
+tiledlayout(2,3)
 
 %% Evolution Fitness over time Plot:
 
@@ -65,6 +66,7 @@ disp(-1*V.BestSol.Cost)
 disp('\n');
 
 %Plot Line of Evolution Best cost over time
+
 figure;
 for ii = 1:tests_done
     Data = load(Snake{ii});
@@ -88,6 +90,7 @@ mean_fitness = mean(All_data,2);
 sigma_fitness = std(All_data,0,2);
 Upper_line = mean_fitness + sigma_fitness;
 Lower_line = mean_fitness - sigma_fitness;
+
 
 figure;
 generations = linspace(1,max_iter,max_iter)';
@@ -116,6 +119,7 @@ alpha_bounds = [0.01 pi/2];
 n_bounds = [1 10];
 d_bounds = [1 10];
 figure;
+
 if nVar==3
     %One Segment Design
     alpha = zeros(tests_done,1); n = zeros(tests_done,1); d = zeros(tests_done,1);

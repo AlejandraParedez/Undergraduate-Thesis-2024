@@ -42,9 +42,9 @@ hold on
 % User defined Regions:
 
 %Entrance frame RCM is at Origin! plotcoord3(eye(4),10,'r','g','b')
-Entranceframe = [Rz(deg2rad(-90)) [0 -30 10]'; 0 0 0 1];
+%Entranceframe = [Rz(deg2rad(-90)) [0 -30 10]'; 0 0 0 1];
 
-Entranceframe = [Rz(deg2rad(-90)) [0 -30 15]'; 0 0 0 1]; % for easy testing
+Entranceframe = [Rz(deg2rad(-90)) [8 -40 17]'; 0 0 0 1]; % for easy testing
 
 plotcoord3(Entranceframe,10,'r','g','b')
 
@@ -61,11 +61,11 @@ plotcoord3(Entranceframe,10,'r','g','b')
 
 % Single target Easy to reach (practically straight ahead) to gauge
 % dexterity measure
-g_ori_dim = [-10, -20, -5, 5, 30, 15];
+g_ori_dim = [-19, -3, -3, 8, 5, 5];
 
 % Single target # entire wall  (both sides)
                
-%Making the bounds
+% Making the bounds
 NG = size(g_ori_dim,1);
 G_xbounds = zeros(NG,2); 
 G_ybounds = zeros(NG,2); 
@@ -76,7 +76,7 @@ for ii = 1:NG
     G_zbounds(ii,:) = [g_ori_dim(ii,3)  g_ori_dim(ii,3)+g_ori_dim(ii,6)];
 end
 
-%Plot Goal Region
+% Plot Goal Region
 for ii = 1:NG
     hold on
     plotprism(Entranceframe,g_ori_dim(ii,1),g_ori_dim(ii,2),g_ori_dim(ii,3),g_ori_dim(ii,4),g_ori_dim(ii,5),g_ori_dim(ii,6),'g')
@@ -110,7 +110,7 @@ dz = 1;
 %Real space bounds at rounded limits
 
 % RED
-W = 100; % x_upper-x_lower 
+W = 40;%100; % x_upper-x_lower 
 x_lower = -round(W/2);
 x_upper = 0;%round(W/2);
 
@@ -120,7 +120,7 @@ y_lower = -8;
 y_upper = round(H/2);
 
 % BLUE
-L = 40; % z_upper-z_lower
+L = 10;%40; % z_upper-z_lower
 z_lower = -8;% round(L/2);
 z_upper = round(L/2) ;%8;
 

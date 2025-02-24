@@ -246,4 +246,24 @@ end
     
     %Combine Raven and trajectory snake
     Traj = [TrajRaven, Traj];
+
+
+    % ***PLOT Trajectory***
+    fignum = getGlobalfignum()
+    figure(fignum)
+    hold on
+    plot3(Traj(1, :), Traj(2, :), Traj(3, :), 'k-', 'LineWidth', 2) %%%%%%% ALE addition
+    plot3(TrajRaven(1, :), TrajRaven(2, :), TrajRaven(3, :), 'r-', 'LineWidth', 2)
+    plot3(Tend(1, :), Tend(2, :), Tend(3, :), 'b-', 'LineWidth', 3)
+    axis equal
+    hold off
+    %******%
+
+
+
+
+
+
+
+
 end

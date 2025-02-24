@@ -24,8 +24,8 @@ qrxU = q_home(1) + pi/4; %was pi/4
 qryL = q_home(2) - pi/4;
 qryU = q_home(2) + pi/4;
 %z translation
-qrzL = 0; %50
-qrzU = 100; %mm
+qrzL = 0; %0; %50
+qrzU = 5; %100; %mm
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Configuration space:%
@@ -84,6 +84,9 @@ tooltransform = txyz(0,0,5); % 5 mm straight tool on the endeffector
 
 %Reduction variable for parallel loop
 ss_map = V.sphere_maps;
+
+
+
 
 parfor ii = 1:N
     %for each configuration q in sampled configuration space Q

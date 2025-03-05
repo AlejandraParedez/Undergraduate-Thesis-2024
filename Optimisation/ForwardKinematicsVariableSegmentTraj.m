@@ -250,7 +250,7 @@ end
 
     % ***PLOT Trajectory***
     fignum = getGlobalfignum()
-    figure(fignum)
+    figure(fignum) % *************************************PROBLEM 1
     hold on
     plot3(Traj(1, :), Traj(2, :), Traj(3, :), 'k-', 'LineWidth', 2) %%%%%%% ALE addition
     plot3(TrajRaven(1, :), TrajRaven(2, :), TrajRaven(3, :), 'r-', 'LineWidth', 2)

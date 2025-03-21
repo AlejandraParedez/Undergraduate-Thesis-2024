@@ -61,11 +61,6 @@ for ii = 1:segments
     %tilt = 5+(k-1)*2   :seg = 2 4+2 = 6, 5+2 = 7
 end
 
-% disp('Q:')
-% disp(Q(1:10,:))
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Display first 10 configurations sampled
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Load the Voxel Data about Task Space %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -90,13 +85,6 @@ tooltransform = txyz(0,0,5); % 5 mm straight tool on the endeffector
 %Reduction variable for parallel loop
 ss_map = V.sphere_maps;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ALE's Attempt at plotting paths
-tends = [];
-
-trajx = [];
-trajy = [];
-trajz = [];
 
 parfor (ii = 1:N,0) %% N
     %for each configuration q in sampled configuration space Q
@@ -107,23 +95,9 @@ parfor (ii = 1:N,0) %% N
     tend = FastForwardKinematicsSnake(tooltransform, design, q);
 
     tends = [tends, tend];
-%     plot_my_plot_tend(tend, design.alpha, design.n, design.d, EntranceFrame)
     
     %Locate voxel indices
     v = Points2Voxels(V,tend') ;
-
-
-% % %     %%%% TEST REMOVE AFTER
-    [Traj,Rend,~] = ForwardKinematicsVariableSegmentTraj(EntranceFrame,tooltransform,design,q,dV,traj_length);
-
-    trajx = [trajx, Traj(1,:)];
-    trajy = [trajy, Traj(2,:)];
-    trajz = [trajz, Traj(3,:)];
-
-    disp(trajx)
-
-
-% % %     plot_my_plot_traj(Traj, design.alpha, design.n, design.d, EntranceFrame)%%%%%%%%%%%%%%%%%%%5
 
 
     %if tend voxel is in bounds (not 0 indices) and labelled goal 
@@ -134,7 +108,6 @@ parfor (ii = 1:N,0) %% N
         [Traj,Rend,~] = ForwardKinematicsVariableSegmentTraj(EntranceFrame,tooltransform,design,q,dV,traj_length);
 
         trajs{ii} = Traj;
-        %plot_my_plot_traj(traj, design.alpha, design.n, design.d, EntranceFrame)%%%%%%%%%%%%%%%%%%%5
  
         %Check if Trajectory is collision free as well
         if (CheckCollision(V,Traj) == false)
@@ -147,10 +120,6 @@ parfor (ii = 1:N,0) %% N
     end
 end
 
-%plot_my_plot_tend(tends, design.alpha, design.n, design.d, EntranceFrame)
-plot_my_plot_traj(trajs, design.alpha, design.n, design.d, EntranceFrame)
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Calculate total dexterity for the goal%
@@ -208,15 +177,6 @@ end
 
 
 
-figname1 = strcat(directory,'/figure', num2str(getfignum1()), '.fig');
-savefig(getfignum1(), figname1 )
-
-figname2 = strcat(directory,'/figure', num2str(getfignum2()), '.fig');
-savefig(getfignum2(), figname2 )
-
-close(getfignum1())
-close(getfignum2())
-
 %Ideal way save
 %Save in the directory folder
 %save(strcat(directory,'/',result_file),'-struct','Results');
@@ -239,39 +199,3 @@ end
 
 end
 
-
-%{
-    if CheckCollision(V,Traj) == false
-       %If configuration has no collision or out of bounds in trajectory
-       
-       %Locate voxel and see if endeffector reached a goal
-       t_end = TransformPoints(Entanceframe2origin,tend');
-       v = Points2Voxels(V,t_end);
-
-       %Check if voxel is goal
-      if V.Goal_labels(v(1),v(2),v(3)) == true
-          
-          %Get patch in the new map
-          new_map = servicesphere_mapping(Rend,V,v);
-
-          %Update sphere maps
-          ss_map = ss_map|new_map; 
-      end
-    end
-
-
-    %Find Forward Kinematic trajectory, endeffector rotation and position
-    [Traj,Rend,tend] = ForwardKinematicsVariableSegmentTraj(EntranceFrame,tooltransform,design,q,dV,traj_length);
-    
-    %Locate voxel indices relative to entrance frame instead of origin
-    v = Points2Voxels(V,TransformPoints(Entanceframe2origin,tend'));
-    
-    %if tend voxel is labelled goal and the shape is collision free 
-    if ((V.Goal_labels(v(1),v(2),v(3)) == true) && (CheckCollision(V,Traj) == false))
-          %Get patch in the new map
-          new_map = servicesphere_mapping(Rend,V,v);
-
-          %Update sphere maps with OR operation its parfor loop friendly
-          ss_map = ss_map|new_map; 
-    end
-%}

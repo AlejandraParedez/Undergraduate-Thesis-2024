@@ -18,19 +18,18 @@ q_home = [deg2rad(-39.5967) deg2rad(-77.9160)]; % right home position
 
 %Raven Joints: Lower Upper
 %x rotation
-qrxL = q_home(1) - pi/4; %radians was 0
-qrxU = q_home(1) + pi/4; %was pi/4
-%y rotation
-qryL = q_home(2) - pi/4;
-qryU = q_home(2) + pi/4;
-%z translation
-qrzL = 0;%was this0; %50, -10 resulted in 0.04 score max
-qrzU = 100; %100; %mm
+qrxL = q_home(1);% - pi/4; %radians was 0
+qrxU = q_home(1);% + pi/4; %was pi/4
+%y rotation;%
+qryL = q_home(2);% - pi/4;
+qryU = q_home(2);% + pi/4;
+%z translation;%
+qrzL = 42; %0;% 
+qrzU = 43;%ceil(sqrt(50^2+4^2))+1;  % limit this such that the raven alone could reach the target directly 4mmx4mm target
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Configuration space:%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %Joint Space Sampling
 N = sample_size;
 
@@ -42,6 +41,7 @@ qrz = random('unif',qrzL,qrzU,N,1);
 %Configuration space calculation where Q(i,:) is the ith configuration in
 %Q space
 Q = zeros(N,3+segments*2);
+SuccessfulConfig = []; 
 Q(:,1:3) = [qrx, qry, qrz];
 
 %Append Configurations for each Segment Joints:
@@ -85,19 +85,19 @@ tooltransform = txyz(0,0,5); % 5 mm straight tool on the endeffector
 %Reduction variable for parallel loop
 ss_map = V.sphere_maps;
 
-
-parfor (ii = 1:N,0) %% N
+% tends = [];
+disp('Q:')
+disp(Q)
+parfor ii = 1:N %(ii = 1:N,0) %% N
     %for each configuration q in sampled configuration space Q
-    q = Q(ii,:);
-    
+    q = Q(ii,:);  
     
     %Find Forward kinemtatic endeffector position relative to Entrance
     tend = FastForwardKinematicsSnake(tooltransform, design, q);
-
-    tends = [tends, tend];
-    
+    % tends = [tends, tend];
     %Locate voxel indices
     v = Points2Voxels(V,tend') ;
+
 
 
     %if tend voxel is in bounds (not 0 indices) and labelled goal 
@@ -107,18 +107,24 @@ parfor (ii = 1:N,0) %% N
         %Find trajectory, endeffector rotation
         [Traj,Rend,~] = ForwardKinematicsVariableSegmentTraj(EntranceFrame,tooltransform,design,q,dV,traj_length);
 
-        trajs{ii} = Traj;
  
         %Check if Trajectory is collision free as well
         if (CheckCollision(V,Traj) == false)
           %Get patch in the new map
           new_map = servicesphere_mapping(Rend,V,v);
+          % plot_my_plot_traj(Traj, design.alpha, design.n, design.d, EntranceFrame)
+          SuccessfulConfig = [SuccessfulConfig; q];
 
           %Update sphere maps with OR operation its parfor loop friendly
           ss_map = ss_map|new_map; 
         end
     end
 end
+
+disp('success:')
+disp(SuccessfulConfig)
+% plot_my_plot_tend(tends, design.alpha, design.n, design.d, EntranceFrame)
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -175,7 +181,12 @@ while exist(strcat(directory,'/',result_file,'.mat'),'file')
     result_file = strcat(original_result_file,'_duplicate_',num2str(duplicate_number));
 end
 
-
+% % figname1 = strcat(directory,'/figure', num2str(getfignum1()), '.fig');
+% % savefig(getfignum1(), figname1 )
+% figname2 = strcat(directory,'/figure', num2str(getfignum2()), '.fig');
+% savefig(getfignum2(), figname2 )
+% % close(getfignum1())
+% close(getfignum2())
 
 %Ideal way save
 %Save in the directory folder

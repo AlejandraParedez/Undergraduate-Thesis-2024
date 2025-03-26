@@ -7,7 +7,7 @@ vector = vector';
 figure(getfignum2()) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 hold on
 %subtitle(['Design: alpha = ', num2str(alpha), '  n = ', num2str(n), ' d = ', num2str(d)])
-plot3(vector(1, :), vector(2, :), vector(3, :), '.', 'LineWidth', 5, 'Color', 'k')
+plot3(vector(1, :), vector(2, :), vector(3, :), '.', 'LineWidth', 1, 'Color', 'k')
 hold off
 
 

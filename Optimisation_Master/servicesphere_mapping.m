@@ -59,8 +59,12 @@ if (jj<1)||(jj>Nh)||(ii<1)||(ii>Ntheta)
 else
     %Everything is okay, update the surface at the voxel:
     a = Vcoord(1); b = Vcoord(2); c = Vcoord(3); 
+    % disp([a b c])
     %Find corresponding region in sphere maps
     new_map((a-1)*Ntheta + ii, (b-1)*Nh + jj,c) = true; %ii is theta, jj is h
 end
-    
+
+
+
+
 end

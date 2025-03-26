@@ -86,7 +86,7 @@ tooltransform = txyz(0,0,5); % 5 mm straight tool on the endeffector
 ss_map = V.sphere_maps;
 
 % tends = [];
-disp('Q:')
+%%disp('Q:')
 disp(Q)
 parfor ii = 1:N %(ii = 1:N,0) %% N
     %for each configuration q in sampled configuration space Q
@@ -112,6 +112,8 @@ parfor ii = 1:N %(ii = 1:N,0) %% N
         if (CheckCollision(V,Traj) == false)
           %Get patch in the new map
           new_map = servicesphere_mapping(Rend,V,v);
+          
+
           % plot_my_plot_traj(Traj, design.alpha, design.n, design.d, EntranceFrame)
           SuccessfulConfig = [SuccessfulConfig; q];
 
@@ -121,8 +123,27 @@ parfor ii = 1:N %(ii = 1:N,0) %% N
     end
 end
 
+disp('hits list:')
+[x, y, z] = ind2sub(size(ss_map), find(ss_map));
+disp([x, y, z])
+disp(['hits total: ', num2str(length(x))])
+
+uniques = unique([x, y, z],'rows');
+disp(['Unique hits: ', num2str(length(uniques))])
+
+figure(555)
+hold on
+plot3(x,y,z, 'b.', 'LineWidth',0.5)
+grid on 
+grid minor
+xlim([0, 1674])
+ylim([0, 648])
+zlim([0, 72])
+hold off
+size(ss_map)
+
 disp('success:')
-disp(SuccessfulConfig)
+disp(length(SuccessfulConfig))
 % plot_my_plot_tend(tends, design.alpha, design.n, design.d, EntranceFrame)
 
 

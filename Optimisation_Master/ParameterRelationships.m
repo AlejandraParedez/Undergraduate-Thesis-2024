@@ -61,7 +61,7 @@ anatomies = {'VoxelData_Cyl_12mm_23Mar2025.mat'};
              % 'VoxelData_LBox_30mm_23Mar2025.mat'};
 
 
-sample_size = 10;%  1.5*1e6;
+sample_size = 1000;%  1.5*1e6;
 disp('Configuration sample size:')
 disp(sample_size)
 

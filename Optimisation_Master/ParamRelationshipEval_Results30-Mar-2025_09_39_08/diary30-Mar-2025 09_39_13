@@ -1,0 +1,39 @@
+Configuration sample size:
+        5000
+Starting parallel pool (parpool) using the 'local' profile ...
+Connected to parallel pool with 4 workers.
+ <a href="matlab: helpPopup parallel.ProcessPool" style="font-weight:bold">ProcessPool</a> with properties: 
+
+            Connected: true
+           NumWorkers: 4
+                 Busy: false
+              Cluster: <a href="matlab: parallel.internal.display.Displayer.displayObject('789CD555CD6ED34010DE98C4C51254E5827AE4015054551C2A2E340455B48A294A83CAC152D8A643EBB2F19A5D47A2B71EFB281CFB183C0217248E1CFB08ECC8E366BA761B50C581913ED93399F9E667275ED1DA8E85936587AF0EA1C37D8747A294D6D5B32DE2FEEE1EEA4F1D7269A452A0BA695680C9A4EA1EA63657F2B4BB3553AAAF66D69963984256E88AFF35E37F48BC1DD243CA55E5437DB57CFD11B0DF2A20DFCF70CE17797CE87311CEF902D205EB7785C5070DF1BC9E8EEBBF433A3E711615CFB7CE9FCD0D7BDE4A15EC1B99E760C6638A3F67F1F37CA5BEE4D581FE4F5A37F77DE9F907646B133E389C112E1CBE3BFC22A0DFE83407F14A1652349CE38D872E6A82B9EED5CD356935E8DC16887A3FBE4F932CB327DFBB36D9F9393F667C2BA45FB53A2947D01DE8895425DF46F0777BB34AFA1787B7467F742B50AB77471FEC15DAC823C04445AAB3D2FE6636DDD7E613187BDD7F089F67A901BB9BA93483413A81CCA6D911FA8F8E0DC843CF1FEBDE5C3087C89B4354D63B016BC1329EB3053CDB1E0FEAFDE7C93BEBBA48A4821399F4F21C972C196A39756527B12C8EB14F9BC4BDD1A0F7325138EE310D7F7CA20F6C325C5F5B7F26591D1BAC8E70C1394464A7AA36317E8DC547C1EDF101BDDD2DEFE50BFF3BEBFFDFFDFDF6F335ED9B10D7F7ED5FC63F58506F65172CFE7FEBF75CDC7EAFBC177C2F4A9DDF2BFC7B73977B05E53739688FF6')">Processes</a> (Local Cluster)
+        AttachedFiles: {}
+    AutoAddClientPath: true
+            FileStore: [1x1 parallel.FileStore]
+           ValueStore: [1x1 parallel.ValueStore]
+          IdleTimeout: 60 minutes (60 minutes remaining)
+          SpmdEnabled: false
+Using Anatomy file:
+VoxelData_CylE_22mm_27Mar2025
+Start
+Begin Evaluation
+Testing member 1 of generation 0
+Evaluating design: 
+    alpha: 1.5708
+        n: 3
+        d: 3
+        w: 3
+success: 0
+hits total: 0
+Unique hits: 0
+Elapsed time is 2.080251 seconds.
+Dexterity score for This design was:
+     0
+Evaluation has finished...
+     0
+Parallel pool using the 'Processes' profile is shutting down.
+load('C:\Users\aleja\OneDrive - Queensland University of Technology\Documents\Undergraduate-Thesis-2024\Optimisation_Master\ParamRelationshipEval_Results30-Mar-2025_09_37_53\N5000SuccessConfigs.mat')
+ParameterRelationships
+All fitness results in this logfile are being saved in folder:
+ParamRelationshipEval_Results30-Mar-2025_09_41_42

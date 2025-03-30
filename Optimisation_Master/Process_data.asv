@@ -1,0 +1,92 @@
+clc
+clear all
+close all
+
+%% Set up
+
+anatomies = {'VoxelData_CylE_22mm_27Mar2025'};
+
+Entranceframe = [Ry(deg2rad(-90)) [0 0 30]'; 0 0 0 1];
+Anatomyfilename = anatomies{1};
+Voxels = load(Anatomyfilename,'Voxel_data');
+
+
+%Tool Endeffector transfrom to tip
+tooltransform = txyz(0,0,5); % 5 mm straight tool on the endeffector
+
+
+%% Load Data
+
+% Case RVF : Raven is allowed full movement
+RVF_data = load('N30000000SuccessConfigsRVF.mat');
+RVF_data = RVF_data.SuccessfulConfigs;
+
+% Case RVT : Raven is allowed only translational movement
+RVT_data = load('N30000000SuccessConfigsRVT.mat');
+RVT_data = RVT_data.SuccessfulConfigs;
+
+
+designRVF = load('DesignRVT_alpha15708_n3_d3.mat');
+
+
+
+%% Find Actual Successes
+
+[~, ~, success_RVFa] = find(RVF_data(:, 1)); [~, ~, success_RVFb] = find(RVF_data(:, 2));
+[~, ~, success_RVFc] = find(RVF_data(:, 3)); [~, ~, success_RVFd] = find(RVF_data(:, 4));
+[~, ~, success_RVFe] = find(RVF_data(:, 5));
+
+success_RVF = [success_RVFa, success_RVFb, success_RVFc, success_RVFd, success_RVFe];
+disp(['RVF success total: ', num2str(length(success_RVF))])
+
+[~, ~, success_RVTa] = find(RVT_data(:, 1)); [~, ~, success_RVTb] = find(RVT_data(:, 2));
+[~, ~, success_RVTc] = find(RVT_data(:, 3)); [~, ~, success_RVTd] = find(RVT_data(:, 4));
+[~, ~, success_RVTe] = find(RVT_data(:, 5));
+
+success_RVT = [success_RVTa, success_RVTb, success_RVTc, success_RVTd, success_RVTe];
+disp(['RVT success total: ', num2str(length(success_RVF))])
+
+
+%% 
+V = Voxels.Voxel_data;
+
+EntranceFrame = V.VoxelBaseFrame;
+Ng = V.NumberGoalVoxels;
+SSparams = V.ServiceSphere_params;
+dV = V.voxelsize;
+
+
+
+ss_map = V.sphere_maps;
+
+
+for success = 1:length(success_RVF)
+
+    q = success_RVF(success,:);
+
+    tend = FastForwardKinematicsSnake(tooltransform, designRVF, q);
+    v = Points2Voxels(V,tend') ;
+
+
+    %if tend voxel is in bounds (not 0 indices) and labelled goal
+    if (~(any(v==0)) && (V.Goal_labels(v(1),v(2),v(3)) == true))
+
+        %Find trajectory, endeffector rotation
+        [Traj,Rend,~] = ForwardKinematicsVariableSegmentTraj(EntranceFrame,tooltransform,designRVF,q,dV,traj_length);
+
+        %Check if Trajectory is collision free as well
+        if (CheckCollision(V,Traj) == false)
+            %Get patch in the new map
+            new_map = servicesphere_mapping(Rend,V,v);
+
+            % plot_my_plot_traj(Traj, design.alpha, design.n, design.d, EntranceFrame)
+            SuccessfulConfigs(ii, :) = q; 
+
+            %Update sphere maps with OR operation its parfor loop friendly
+            ss_map = ss_map|new_map;
+
+        end
+    end
+end
+
+%% Dexterity Calculation

@@ -2,8 +2,8 @@
 % SnakeRaven Optimisation on HPC
 % Andrew Razjigaev 11 Feb 2021
  
-clc;
-clear;
+% clc;
+% clear;
 close all;
 
 %% Create Directory on HPC-Drive for all the results to go into:
@@ -74,13 +74,8 @@ Entranceframe = [Ry(deg2rad(-90)) [0 0 30]'; 0 0 0 1];
 %VarSize=[1 nVar];   % Decision Variables Matrix Size
 
 
-% % % % % alpha n d bounds: [lower upper]
-% alpha_bounds = [0.01 pi/2];
-% n_bounds = [1 5];
-% d_bounds = [1, 5]; 
-
 MaxIt = 1;
-alpha = deg2rad(35);% deg2rad(5):deg2rad(10)-deg2rad(5):deg2rad(90);
+alpha = deg2rad(0.1);% 35 deg2rad(5):deg2rad(10)-deg2rad(5):deg2rad(90);
 w = 3;
 d = 1;% :1:10;
 n = 3; 

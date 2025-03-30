@@ -2,8 +2,8 @@
 % SnakeRaven Optimisation on HPC
 % Andrew Razjigaev 11 Feb 2021
  
-% clc;
-% clear;
+clc;
+clear;
 close all;
 
 %% Create Directory on HPC-Drive for all the results to go into:
@@ -29,9 +29,12 @@ disp(directory)
 %Add path to directory
 addpath(directory);
 
+diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
+
+
 %% Anatomy Voxelization:
 % 
-anatomies = {'VoxelData_Cyl_12mm_23Mar2025.mat'};
+anatomies = {'VoxelData_CylE_22mm_27Mar2025'};
 % anatomies = {'VoxelData_Cyl_6mm_23Mar2025.mat'; 
 %              'VoxelData_Cyl_9mm_23Mar2025.mat';
 %              'VoxelData_Cyl_12mm_23Mar2025.mat'; 
@@ -43,8 +46,6 @@ anatomies = {'VoxelData_Cyl_12mm_23Mar2025.mat'};
 %              'VoxelData_Cyl_30mm_23Mar2025.mat'};
 
 % anatomies = {'VoxelData_Cyl_30mm_23Mar2025.mat'};
-
-%
 
 % anatomies = {'VoxelData_LBox_6mm_23Mar2025.mat'; 
 %              'VoxelData_LBox_8mm_23Mar2025.mat';
@@ -61,26 +62,20 @@ anatomies = {'VoxelData_Cyl_12mm_23Mar2025.mat'};
              % 'VoxelData_LBox_30mm_23Mar2025.mat'};
 
 
-sample_size = 1000;%  1.5*1e6;
+sample_size = 5000;% 30 *1e6;%  1.5*1e6;
 disp('Configuration sample size:')
 disp(sample_size)
 
 % Entrance frame
 Entranceframe = [Ry(deg2rad(-90)) [0 0 30]'; 0 0 0 1];
 
-
-% nVar=3;            % Number of Decision Variables
-%nVar=6;            % One or Two segment variables 
-%VarSize=[1 nVar];   % Decision Variables Matrix Size
-
-
 MaxIt = 1;
 alpha = deg2rad(0.1);% 35 deg2rad(5):deg2rad(10)-deg2rad(5):deg2rad(90);
 w = 3;
-d = 1;% :1:10;
+d = 3; % :1:10;
 n = 3; 
 
-changingvar = d; %% Change line 152 accordingly
+changingvar = alpha; %% Change i-for-loop accordingly
 
 % 
 % % resolution of alpha, n and d
@@ -125,7 +120,7 @@ disp(poolobj)
 
 %% Main Loop
 
-RResults = zeros(nPop,length(anatomies));
+Costs = zeros(nPop,length(anatomies));
 
 for j = 1:length(anatomies)
     % Environment setup
@@ -164,13 +159,12 @@ for j = 1:length(anatomies)
     for i=1:nPop
 
         % initial population within bound %unifrnd(VarMin,VarMax,VarSize);
-        pop(i).Position= [alpha, n, d(i)]; % generate_random_design(VarMin,VarMax);
+        pop(i).Position= [alpha(i), n, d]; % generate_random_design(VarMin,VarMax); %% CHANGE CHANGING VAR %%
 
         % Run the Fitness Function
         disp(['Testing member ' num2str(i) ' of generation 0']);
         disp('Evaluating design: ')
         disp(vector2designstruct(pop(i).Position))
-
 
         %Check if the design has already been tested:
         [was_tested, prior_cost, prior_time] = is_member_already_tested(pop(i).Position,Allpop,Allcost,Alltime);
@@ -187,7 +181,7 @@ for j = 1:length(anatomies)
 
             tic
             pop(i).Cost=-1*CostFunction(vector2designstruct(pop(i).Position));
-            RResults(i, j) = -pop(i).Cost;
+            Costs(i, j) = -pop(i).Cost;
             toc
             pop(i).Time = toc;
 
@@ -210,13 +204,12 @@ for j = 1:length(anatomies)
     BestCost=zeros(MaxIt,1);
 end
 
-disp(RResults)
-
+disp(Costs)
 
 % RResults_out = struct('Results',RResults);
 % %Save the Results based on the design parameters
 % result_file = strcat('Results');
-save(directory, 'RResults');
+save([directory, '/', 'Costs'], 'Costs');
 
 %%
 % % %% DE Main Loop

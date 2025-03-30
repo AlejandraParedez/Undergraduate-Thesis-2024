@@ -42,12 +42,13 @@ qrz = random('unif',qrzL,qrzU,N,1);
 %Q space
 Q = zeros(N,3+segments*2);
 SuccessfulConfig = []; 
+
 Q(:,1:3) = [qrx, qry, qrz];
 
 %Append Configurations for each Segment Joints:
 for ii = 1:segments
     %Continuum Joints: Lower Upper
-    theta_max = (design.alpha(ii)*design.n(ii))/2; %Maximum bending
+    theta_max = (design.alpha(ii)*design.n(ii))/2; %Maximum bending <_________________REVERSE THIS FOR LARGE ANGLE CASE
     %pan
     qipL = -theta_max; qipU = theta_max;
     %tilt
@@ -55,17 +56,19 @@ for ii = 1:segments
     %Sample configuration space, pan and tilt joints:
     qip = random('unif',qipL,qipU,N,1);
     qit = random('unif',qitL,qitU,N,1);
-%%
-    % SAMPLING ALL ALPHA COMBOS
-    alpha_space = linspace(0.1,90, 170)
-
-    for a = 1:170
-        for b = 1:70
-            qip(a)
-            qit
-        end
-    end
-
+% %%
+%     % SAMPLING ALL ALPHA COMBOS
+%     n = 300;
+%     alpha_space = linspace(0.1,90, n);
+%     qip = []; qit = [];
+%     for a = 1:n
+%         for b = 1:n
+%             qip = [qip; alpha_space(a)];
+%             qit = [qit; alpha_space(b)];
+%         end
+%     end
+% 
+%     size([qip, qit])
 %%
     %Append segment configurations to whole configuration space:
     Q(:,(4+(ii-1)*2):(5+(ii-1)*2)) = [qip, qit];

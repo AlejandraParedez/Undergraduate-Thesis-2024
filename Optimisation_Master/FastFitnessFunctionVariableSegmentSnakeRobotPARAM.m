@@ -24,7 +24,7 @@ qrxU = q_home(1);% + pi/4; %was pi/4
 qryL = q_home(2);% - pi/4;
 qryU = q_home(2);% + pi/4;
 %z translation;%
-qrzL = 30; %0;% 
+qrzL = 0; %0;% 
 qrzU = ceil(sqrt(50^2+4^2))+1;  % limit this such that the raven alone could reach the target directly 4mmx4mm target
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,18 +55,6 @@ for ii = 1:segments
     %Sample configuration space, pan and tilt joints:
     qip = random('unif',qipL,qipU,N,1);
     qit = random('unif',qitL,qitU,N,1);
-%%
-    % SAMPLING ALL ALPHA COMBOS
-    alpha_space = linspace(0.1,90, 170)
-
-    for a = 1:170
-        for b = 1:70
-            qip(a)
-            qit
-        end
-    end
-
-%%
     %Append segment configurations to whole configuration space:
     Q(:,(4+(ii-1)*2):(5+(ii-1)*2)) = [qip, qit];
     % pan = 4+(k-1)*2  :seg =1 4+0, 5+0
@@ -74,7 +62,6 @@ for ii = 1:segments
 end
 
 
-%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Load the Voxel Data about Task Space %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -99,13 +86,12 @@ tooltransform = txyz(0,0,5); % 5 mm straight tool on the endeffector
 %Reduction variable for parallel loop
 ss_map = V.sphere_maps;
 repeats = 0;
-% sample_hit_when = zeros(N,1);
-SuccessfulConfigs = zeros(N, size(Q, 2));
+sample_hit_when = zeros(N,1);
 % tends = [];
 %%disp('Q:')
 %%disp(Q)
-
-parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
+for ii = 1:N %(ii = 1:N,0) %% N PARFOR
+    
     %for each configuration q in sampled configuration space Q
     q = Q(ii,:);  
     
@@ -114,6 +100,8 @@ parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
     % tends = [tends, tend];
     %Locate voxel indices
     v = Points2Voxels(V,tend') ;
+
+
 
     %if tend voxel is in bounds (not 0 indices) and labelled goal 
     if (~(any(v==0)) && (V.Goal_labels(v(1),v(2),v(3)) == true))
@@ -124,12 +112,22 @@ parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
 
         %Check if Trajectory is collision free as well
         if (CheckCollision(V,Traj) == false)
+          disp(['ii = ', num2str(ii)])
           %Get patch in the new map
           new_map = servicesphere_mapping(Rend,V,v);
           
           % plot_my_plot_traj(Traj, design.alpha, design.n, design.d, EntranceFrame)
-          SuccessfulConfigs(ii, :) = q; % can just get rid of duplicates?
+          SuccessfulConfig = [SuccessfulConfig; q];
 
+          temp = ss_map|new_map;
+          if (sum(ss_map(:)) == sum(temp(:))) %% CAN ONLY BE USED IN REGULAR FOR LOOP !!! 
+          % also comment out line 133
+              repeats = repeats + 1;
+              sample_hit_when(ii,1) = 0;
+              
+          else
+              sample_hit_when(ii,1) = 1;
+          end
 
           %Update sphere maps with OR operation its parfor loop friendly
           ss_map = ss_map|new_map; 
@@ -137,6 +135,10 @@ parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
         end
     end
 end
+
+AngleHit = [Q(:,4:5), sample_hit_when(:, 1) ];
+
+save(['N', num2str(N), 'AngleHit'], AngleHit) % will need to recalculate dexterity, can only compare same size sample sizes within samples?, try all permutations?  
 
 % plot_my_plot_tend(tends, design.alpha, design.n, design.d, EntranceFrame)
 
@@ -153,19 +155,38 @@ uniques = unique([x, y, z],'rows');
 disp(['Unique hits: ', num2str(length(uniques))])
 
 %% Dexterity over time
-% sample_hit_when_cumulative = zeros(N,1);
-% running = 0;
-% for k = 1:N
-%     running = running + sample_hit_when(k,1);
-%     sample_hit_when_cumulative(k,1) = running ;
-% end
+sample_hit_when_cumulative = zeros(N,1);
+running = 0;
+for k = 1:N
+    running = running + sample_hit_when(k,1);
+    sample_hit_when_cumulative(k,1) = running ;
+end
 
-% figure('Name', 'Reachable')
-% plot(1:1:N, sample_hit_when_cumulative, 'k-')
-% 
-% dexterity_oversamples = sample_hit_when_cumulative / (V.ServiceSphere_params(1)* V.ServiceSphere_params(2)*V.ServiceSphere_params(1)*V.NumberGoalVoxels );
-% figure('Name', 'Dexterity over Samples')
-% plot(1:1:N, dexterity_oversamples, 'k-')
+
+%% Get the plots
+
+figure(8888)
+hold on; ytickformat('%.0f'); 
+ax = gca;
+ax.YAxis.Exponent = 0;  
+plot(1:1:N, sample_hit_when_cumulative, 'k-')
+hold off
+
+dexterity_oversamples = sample_hit_when_cumulative / (V.ServiceSphere_params(1)* V.ServiceSphere_params(2)*V.ServiceSphere_params(1)*V.NumberGoalVoxels );
+figure(9999)
+hold on; ytickformat('%.4f');
+ax = gca;
+ax.YAxis.Exponent = 0; 
+plot(1:1:N, dexterity_oversamples, 'k-')
+hold off
+
+
+
+reachable = strcat(directory,'/figure', 'ReachableN', num2str(N), '.fig');
+savefig(8888, reachable )
+figname1 = strcat(directory,'/figure', 'Dexterity over Samples', num2str(N), '.fig');
+savefig(9999, figname1 )
+
 
 %%
 % % Plot hits %
@@ -178,6 +199,8 @@ disp(['Unique hits: ', num2str(length(uniques))])
 % ylim([0, 648])
 % zlim([0, 72])
 % hold off
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Calculate total dexterity for the goal%
@@ -259,9 +282,6 @@ while not_worked
         pause(1) %waits for connection error to resolve
     end
 end
-
-save([directory, '/', 'N', num2str(N), 'SuccessConfigs'], 'SuccessfulConfigs'); 
-
 
 end
 

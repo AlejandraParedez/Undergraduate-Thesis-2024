@@ -264,6 +264,7 @@ while not_worked
 end
 
 save([directory, '/', 'N', num2str(N), 'SuccessConfigs'], 'SuccessfulConfigs'); 
+%save([directory, '/', 'N', num2str(N), 'TotalConfigs'], 'Q'); 
 
 
 end

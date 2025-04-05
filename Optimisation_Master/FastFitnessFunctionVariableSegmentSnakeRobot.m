@@ -10,7 +10,11 @@ function [Score] = FastFitnessFunctionVariableSegmentSnakeRobot(design,sample_si
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Define the number of segments in this design
-segments = length(design.alpha);
+
+segments = length(design.alpha); % ONE segment for single module design
+disp(design)
+disp(design.alpha)
+disp(segments)
 
 %Home Vector:
 q_home = [deg2rad(-39.5967) deg2rad(-77.9160)]; % right home position
@@ -55,19 +59,19 @@ for ii = 1:segments
     %Sample configuration space, pan and tilt joints:
     qip = random('unif',qipL,qipU,N,1);
     qit = random('unif',qitL,qitU,N,1);
-%%
-    % SAMPLING ALL ALPHA COMBOS
-    n = 300
-    alpha_space = linspace(0.1,90, n);
-    qip = []; qit = [];
-    for a = 1:n
-        for b = 1:n
-            qip = [qip; alpha_space(a)];
-            qit = [qit; alpha_space(b)];
-        end
-    end
-
-    size([qip, qit])
+% %%
+%     % SAMPLING ALL ALPHA COMBOS
+%     n = 300
+%     alpha_space = linspace(0.1,90, n);
+%     qip = []; qit = [];
+%     for a = 1:n
+%         for b = 1:n
+%             qip = [qip; alpha_space(a)];
+%             qit = [qit; alpha_space(b)];
+%         end
+%     end
+% 
+%     size([qip, qit])
 %%
     %Append segment configurations to whole configuration space:
     Q(:,(4+(ii-1)*2):(5+(ii-1)*2)) = [qip, qit];
@@ -131,7 +135,6 @@ parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
           
           % plot_my_plot_traj(Traj, design.alpha, design.n, design.d, EntranceFrame)
           SuccessfulConfigs(ii, :) = q; % can just get rid of duplicates?
-
 
           %Update sphere maps with OR operation its parfor loop friendly
           ss_map = ss_map|new_map; 

@@ -70,7 +70,7 @@ disp(sample_size)
 Entranceframe = [Ry(deg2rad(-90)) [0 0 30]'; 0 0 0 1];
 
 MaxIt = 1;
-alpha = deg2rad(0.1);% 35 deg2rad(5):deg2rad(10)-deg2rad(5):deg2rad(90);
+alpha = deg2rad(90);% 35 deg2rad(5):deg2rad(10)-deg2rad(5):deg2rad(90);
 w = 3;
 d = 3; % :1:10;
 n = 3; 
@@ -132,7 +132,7 @@ for j = 1:length(anatomies)
     Voxels = load(Anatomyfilename,'Voxel_data');
 
     % Cost Function
-    CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobot(design,sample_size,Voxels,directory);
+    CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobotPARAM(design,sample_size,Voxels,directory);
 
     disp('Start') ;%Starting Snake Evolution Algorithm Creating Initial Population:');
 

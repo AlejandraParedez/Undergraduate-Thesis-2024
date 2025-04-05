@@ -1,4 +1,4 @@
-function [Score] = FastFitnessFunctionVariableSegmentSnakeRobot(design,sample_size,Voxels,directory)
+function [Score] = FastFitnessFunctionVariableSegmentSnakeRobotPARAM(design,sample_size,Voxels,directory)
 % The fitness is based on the voxelisation of the anatomy and completing a
 % dexterity calculation for that. That voxelisation needs to be done in
 % GenerateVoxelisation.m first to export the structure of voxel data for

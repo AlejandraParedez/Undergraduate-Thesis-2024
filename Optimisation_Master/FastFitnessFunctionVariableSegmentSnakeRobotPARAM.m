@@ -89,6 +89,7 @@ repeats = 0;
 unique_hits_when = zeros(N,1);
 no_hits = false;
 tends = [];
+SuccessfulConfig = [];
 %%disp('Q:')
 %%disp(Q)
 for ii = 1:N %(ii = 1:N,0) %% N PARFOR
@@ -113,7 +114,7 @@ for ii = 1:N %(ii = 1:N,0) %% N PARFOR
 
         %Check if Trajectory is collision free as well
         if (CheckCollision(V,Traj) == false)
-          disp(['ii = ', num2str(ii)])
+          % disp(['ii = ', num2str(ii)])
           %Get patch in the new map
           new_map = servicesphere_mapping(Rend,V,v);
           
@@ -149,9 +150,9 @@ disp(['Unique: ', num2str(total_unique_hits)])
 
 % Check 
 if (total_unique_hits + repeats == length(SuccessfulConfig))
-    disp('Correct!')
+    disp('Total unique hits count is correct!')
 else
-    disp('Hits incorrect.')
+    disp('Hits count is incorrect.')
 end
 
 %% Extract alpha sets - Size of sample spaces per alpha value
@@ -165,12 +166,12 @@ for a = 1:1:90
 
     valid_configs = all(Q(:,4:5) <=theta_max, 2);
     config_subset = Q(valid_configs, :);
-
+    
     sizesub = size(config_subset, 1);
     % disp(sizesub);
     Total_configs_per_angle = [Total_configs_per_angle; a, theta_max, sizesub];
+    
 end
-
 diffs = abs( Total_configs_per_angle(:,3) - [Total_configs_per_angle(2:end,3);N]);
 
 
@@ -192,7 +193,7 @@ else
         config_subset = SuccessfulConfig(valid_configs, :);
 
 
-        Total_hits_per_angle = [Total_hits_per_angle; a, rad2deg(arU), size(config_subset, 1) ];
+        Total_hits_per_angle = [Total_hits_per_angle; a, theta_max, size(config_subset, 1) ];
     end
     alphahitdiffs = abs(Total_hits_per_angle(:,3) - [Total_hits_per_angle(2:end, 3); 0]);
 
@@ -201,20 +202,42 @@ end
 %% Final output
 info_final = [Total_hits_per_angle, alphahitdiffs, Total_configs_per_angle(:, 3), diffs];
 
-%% Figures
-identifier = [V.filename, ' N: ', num2str(N), ' ', test_setup.descript]; 
+colNames = {'alpha','theta_max','total hits', 'Diff Hits', 'Configs/alpha', 'Diff Configs'};
 
-figure('name', 'Alpha vs Hits')
+info_table = array2table(info_final, 'VariableNames',colNames)
+
+
+%% Dexterity over time
+
+sample_hit_when_cumulative = zeros(N,1);
+running = 0;
+for k = 1:N
+    running = running + unique_hits_when(k,1);
+    sample_hit_when_cumulative(k,1) = running ;
+end
+
+dexterity_oversamples = sample_hit_when_cumulative / (V.ServiceSphere_params(1)* V.ServiceSphere_params(2)*V.ServiceSphere_params(1)*V.NumberGoalVoxels );
+disp('dex:')
+disp(dexterity_oversamples(end))
+
+%% Plots
+identifier = [V.filename, ', N:', num2str(N), ' ', testsetup.descript]; 
+%% Alpha vs Hits
+figure(1)
 u = 90;
 hold on
 plot(info_final(1:u,1), info_final(1:u,3))
+
+yl = ylim; 
+ylim([0, yl(2)]); 
+
 xlabel('alpha')
 ylabel('Hits')
 title('Alpha vs Hits')
 subtitle(identifier)
 hold off
-
-figure('name', 'Alpha vs No. Configurations')
+%% Alpha vs Configs
+figure(2)
 hold on
 yyaxis right
 plot(info_final(:,1), info_final(:,5))
@@ -226,11 +249,46 @@ plot(info_final(:,1), info_final(:,6))
 xlabel('alpha')
 ylabel('Difference')
 
+yl = ylim; 
+ylim([0, yl(2)]); 
+
+title('Alpha vs No.Configurations')
 subtitle(identifier)
 hold off
 
+%% Hits vs Configs (Samples)
 
+figure(3)
+hold on
+xlabel('No. Configurations')
 
+yyaxis right
+plot(1:1:N, dexterity_oversamples, '--')
+ylabel('Dexterity')
+
+yyaxis left
+plot(1:1:N, sample_hit_when_cumulative, '-')
+ylabel('Hits')
+
+ytickformat('%.4f');
+ax = gca;
+ax.YAxis.Exponent = [0, 0]; 
+
+hold off
+%% Save Plot Figures
+
+figID = [extractBefore(V.filename, ".mat"), '_N', num2str(N), '_', testsetup.ID]; 
+
+figfiledirect = strcat(directory,'/fig', figID, 'AlphavsHits', '.fig');
+savefig(1, figfiledirect );
+
+figfiledirect = strcat(directory,'/fig', figID, 'AlphavsConfigs', '.fig');
+savefig(2, figfiledirect );
+
+figfiledirect = strcat(directory,'/fig', figID, 'HitsvsConfigs', '.fig');
+savefig(3, figfiledirect );
+
+%%
 % % % % % 
 % % % % % AngleHit = [Q(:,4:5), unique_hits_when(:, 1) ]; % records which angles are hitting
 % % % % % save(['N', num2str(N), 'AngleHit'], AngleHit) % will need to recalculate dexterity, can only compare same size sample sizes within samples?, try all permutations?  
@@ -249,13 +307,7 @@ hold off
 % % % % % uniques = unique([x, y, z],'rows');
 % % % % % disp(['Unique hits: ', num2str(length(uniques))])
 
-%% Dexterity over time
-sample_hit_when_cumulative = zeros(N,1);
-running = 0;
-for k = 1:N
-    running = running + unique_hits_when(k,1);
-    sample_hit_when_cumulative(k,1) = running ;
-end
+
 
 
 % %% Get the plots

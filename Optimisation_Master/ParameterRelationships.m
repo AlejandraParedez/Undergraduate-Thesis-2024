@@ -63,7 +63,7 @@ anatomies = {'VoxelData_CylE_22mm_27Mar2025'};
              % 'VoxelData_LBox_30mm_23Mar2025.mat'};
 
 
-sample_size = 2000;% 30 *1e6;%  1.5*1e6;
+sample_size = 5000;% 30 *1e6;%  1.5*1e6;
 disp('Configuration sample size:')
 disp(sample_size)
 
@@ -71,7 +71,7 @@ disp(sample_size)
 Entranceframe = [Ry(deg2rad(-90)) [0 0 30]'; 0 0 0 1];
 
 MaxIt = 1;
-alpha = deg2rad(0.01);% 35 deg2rad(5):deg2rad(10)-deg2rad(5):deg2rad(90);
+alpha = deg2rad(5);% 35 deg2rad(5):deg2rad(10)-deg2rad(5):deg2rad(90);
 w = 3;
 d = 3; % :1:10;
 n = 3; 
@@ -84,7 +84,8 @@ radius_limit = 4; % changes depending on cylinder used
 travelallowance = 1;
 
 
-test_setup.descript = 'RV: T&R, Target: S';
+testsetup.descript = 'RV: T&R, Target: S';
+testsetup.ID = 'RV_TR_Target_S';
 testsetup.RavenLimits_yrot = 0; %pi/4;
 testsetup.RavenLimits_xrot = 0; %pi/4;
 testsetup.RavenLimits_tranmin = 30 ; 
@@ -160,7 +161,7 @@ for j = 1:length(anatomies)
         else
             %Unique Design needs To be calculated
             func_iter = func_iter + 1;
-            TrajandTendPlotsetup(1, i, vector2designstruct(pop(i).Position), Voxels, Entranceframe  )
+            % TrajandTendPlotsetup(1, i, vector2designstruct(pop(i).Position), Voxels, Entranceframe  )
 
             tic
             pop(i).Cost=-1*CostFunction(vector2designstruct(pop(i).Position));

@@ -76,37 +76,17 @@ d = 3; % :1:10;
 n = 3; 
 
 changingvar = alpha; %% Change i-for-loop accordingly
+%%
 
-% 
-% % resolution of alpha, n and d
-% res = [0.01 1 0.01]; %[0.01 1 0.01];
-% if nVar==3
-%     % One segment
-%     VarMin=[alpha_bounds(1) n_bounds(1) d_bounds(1)];          % Lower Bound of Decision Variables
-%     VarMax=[alpha_bounds(2) n_bounds(2) d_bounds(2)];          % Upper Bound of Decision Variables
-%     %%%%%disp('Solving a one segment design 3 variables')
-%     %Solve the design space:
-%     %%%%%disp('That makes a design space of this many designs:')
-%     N_alpha = round((alpha_bounds(2) - round(alpha_bounds(1),2))/res(1)) + 1; % that is 157
-%     N_n = round((n_bounds(2) - n_bounds(1))/res(2)) + 1; %that is 10
-%     N_d = round((d_bounds(2) - d_bounds(1))/res(3)) + 1; % that is 901
-%     Design_space = N_alpha*N_n*N_d;
-%     %%%disp(Design_space)
-% elseif nVar==6
-%     % Two segment
-%     VarMin=[alpha_bounds(1) n_bounds(1) d_bounds(1) ...
-%         alpha_bounds(1) n_bounds(1) d_bounds(1)];          % Lower Bound of Decision Variables
-%     VarMax=[alpha_bounds(2) n_bounds(2) d_bounds(2) ...
-%         alpha_bounds(2) n_bounds(2) d_bounds(2)];          % Upper Bound of Decision Variables  
-%     %%%%%disp('Solving a two segment design 6 variables')
-%     %Solve the design space:
-%     %%%%%disp('That makes a design space of this many designs:')
-%     N_alpha = round((alpha_bounds(2) - round(alpha_bounds(1),2))/res(1)) + 1; % that is 157
-%     N_n = round((n_bounds(2) - n_bounds(1))/res(2)) + 1; %that is 10
-%     N_d = round((d_bounds(2) - d_bounds(1))/res(3)) + 1; % that is 901
-%     Design_space = N_alpha*N_n*N_d*N_alpha*N_n*N_d;
-%     disp(Design_space)
-% end
+dist_limit
+radius_limit
+
+testsetup.RavenLimits_yrot = pi/4;
+testsetup.RavenLimits_xrot = pi/4;
+testsetup.RavenLimits_tran = ceil(sqrt(50^2+4^2))+1 ; 
+
+
+disp(testsetup)
 
 %% DE Parameters
 

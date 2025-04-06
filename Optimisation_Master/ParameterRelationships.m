@@ -63,7 +63,7 @@ anatomies = {'VoxelData_CylE_22mm_27Mar2025'};
              % 'VoxelData_LBox_30mm_23Mar2025.mat'};
 
 
-sample_size = 5000;% 30 *1e6;%  1.5*1e6;
+sample_size = 1000;% 30 *1e6;%  1.5*1e6;
 disp('Configuration sample size:')
 disp(sample_size)
 
@@ -82,7 +82,6 @@ changingvar = alpha; %% Change i-for-loop accordingly
 dist_limit = 50;
 radius_limit = 4; % changes depending on cylinder used
 travelallowance = 1;
-
 
 testsetup.descript = 'RV: T&R, Target: S';
 testsetup.ID = 'RV_TR_Target_S';

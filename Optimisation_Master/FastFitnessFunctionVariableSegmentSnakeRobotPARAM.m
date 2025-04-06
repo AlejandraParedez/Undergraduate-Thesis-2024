@@ -209,14 +209,14 @@ info_table = array2table(info_final, 'VariableNames',colNames)
 
 %% Dexterity over time
 
-sample_hit_when_cumulative = zeros(N,1);
+unique_hit_when_cumulative = zeros(N,1);
 running = 0;
 for k = 1:N
     running = running + unique_hits_when(k,1);
-    sample_hit_when_cumulative(k,1) = running ;
+    unique_hit_when_cumulative(k,1) = running ;
 end
 
-dexterity_oversamples = sample_hit_when_cumulative / (V.ServiceSphere_params(1)* V.ServiceSphere_params(2)*V.ServiceSphere_params(1)*V.NumberGoalVoxels );
+dexterity_oversamples = unique_hit_when_cumulative / (V.ServiceSphere_params(1)* V.ServiceSphere_params(2)*V.NumberGoalVoxels );
 disp('dex:')
 disp(dexterity_oversamples(end))
 
@@ -259,21 +259,25 @@ hold off
 %% Hits vs Configs (Samples)
 
 figure(3)
+tiledlayout(2,1) 
+
+nexttile
 hold on
-xlabel('No. Configurations')
-
-yyaxis right
-plot(1:1:N, dexterity_oversamples, '--')
-ylabel('Dexterity')
-
-yyaxis left
-plot(1:1:N, sample_hit_when_cumulative, '-')
-ylabel('Hits')
-
 ytickformat('%.4f');
 ax = gca;
-ax.YAxis.Exponent = [0, 0]; 
+ax.YAxis.Exponent = 0; 
+plot(1:1:N, dexterity_oversamples, '-')
+yline(dexterity_oversamples(end),'-',{['Final Dexterity Score: ', num2str(dexterity_oversamples(end))]}, 'LabelHorizontalAlignment', 'middle', 'Color', '#D95319');
+xlabel('No. Configurations')
+ylabel('Dexterity')
+hold off
 
+nexttile
+hold on
+plot(1:1:N, unique_hit_when_cumulative, '-')
+yline(unique_hit_when_cumulative(end),'-',{['Final No. Unique Successes: ', num2str(unique_hit_when_cumulative(end))]}, 'LabelHorizontalAlignment', 'middle', 'Color', '#D95319');
+xlabel('No. Configurations')
+ylabel('Hits')
 hold off
 %% Save Plot Figures
 

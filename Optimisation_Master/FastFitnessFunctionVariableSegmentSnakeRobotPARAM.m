@@ -5,6 +5,7 @@ function [Score] = FastFitnessFunctionVariableSegmentSnakeRobotPARAM(design,samp
 % this.
 %author: Andrew Razjigaev 2020
 
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Joint space limits for design object:%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -180,7 +181,7 @@ Total_hits_per_angle = []; % TOTAL UNIQUE HITS PER ANGLE
 if no_hits == true
     disp('There were no successes.')
     Total_hits_per_angle = zeros(90,1);
-    alphahitdiffs = zeros(90,1);
+    alphahitdiffs = zeros(90,3);
 else
     for a = 1:1:90
 
@@ -204,9 +205,9 @@ info_final = [Total_hits_per_angle, alphahitdiffs, Total_configs_per_angle(:, 3)
 
 colNames = {'alpha','theta_max','total hits', 'Diff Hits', 'Configs/alpha', 'Diff Configs'};
 
-info_table = array2table(info_final, 'VariableNames',colNames)
+info_table = array2table(info_final, 'VariableNames',colNames);
 
-
+save([directory, '/', 'InfoTable'], 'info_table');
 %% Dexterity over time
 
 unique_hit_when_cumulative = zeros(N,1);
@@ -217,14 +218,18 @@ for k = 1:N
 end
 
 dexterity_oversamples = unique_hit_when_cumulative / (V.ServiceSphere_params(1)* V.ServiceSphere_params(2)*V.NumberGoalVoxels );
-disp('dex:')
-disp(dexterity_oversamples(end))
 
 %% Plots
-identifier = [V.filename, ', N:', num2str(N), ' ', testsetup.descript]; 
+%% Create test ID
+TestID = [extractBefore(V.filename, ".stl"), testsetup.ID]; 
+
+identifier = [extractBefore(V.filename, ".stl"), '   N:', num2str(N), '   ', testsetup.descript]; 
 %% Alpha vs Hits
 figure(1)
+sgtitle(identifier, 'Interpreter', 'none')
 u = 90;
+
+subplot(2,2,1);
 hold on
 plot(info_final(1:u,1), info_final(1:u,3))
 
@@ -234,10 +239,11 @@ ylim([0, yl(2)]);
 xlabel('alpha')
 ylabel('Hits')
 title('Alpha vs Hits')
-subtitle(identifier)
+% subtitle(identifier)
 hold off
 %% Alpha vs Configs
-figure(2)
+% figure(2)
+subplot(2,2,3);
 hold on
 yyaxis right
 plot(info_final(:,1), info_final(:,5))
@@ -253,45 +259,52 @@ yl = ylim;
 ylim([0, yl(2)]); 
 
 title('Alpha vs No.Configurations')
-subtitle(identifier)
+% subtitle(identifier)
 hold off
 
 %% Hits vs Configs (Samples)
 
-figure(3)
-tiledlayout(2,1) 
+% figure(3)
+% tiledlayout(2,1) 
 
-nexttile
+subplot(2,2,2);
 hold on
 ytickformat('%.4f');
 ax = gca;
 ax.YAxis.Exponent = 0; 
 plot(1:1:N, dexterity_oversamples, '-')
-yline(dexterity_oversamples(end),'-',{['Final Dexterity Score: ', num2str(dexterity_oversamples(end))]}, 'LabelHorizontalAlignment', 'middle', 'Color', '#D95319');
+yline(dexterity_oversamples(end),'-',{['Final Dexterity Score: ', num2str(dexterity_oversamples(end))]}, 'LabelHorizontalAlignment', 'center', 'Color', '#D95319');
 xlabel('No. Configurations')
 ylabel('Dexterity')
+
+title('Dexterity vs No.Configurations')
+% subtitle(identifier)
 hold off
 
-nexttile
+subplot(2,2,4);
 hold on
 plot(1:1:N, unique_hit_when_cumulative, '-')
-yline(unique_hit_when_cumulative(end),'-',{['Final No. Unique Successes: ', num2str(unique_hit_when_cumulative(end))]}, 'LabelHorizontalAlignment', 'middle', 'Color', '#D95319');
+yline(unique_hit_when_cumulative(end),'-',{['Final No. Unique Successes: ', num2str(unique_hit_when_cumulative(end))]}, 'LabelHorizontalAlignment', 'center', 'Color', '#D95319');
 xlabel('No. Configurations')
 ylabel('Hits')
+title('Hits vs No.Configurations')
+% subtitle(identifier)
 hold off
 %% Save Plot Figures
 
-figID = [extractBefore(V.filename, ".mat"), '_N', num2str(N), '_', testsetup.ID]; 
-
-figfiledirect = strcat(directory,'/fig', figID, 'AlphavsHits', '.fig');
+figfiledirect = strcat(directory,'/', TestID, 'Plots', '.fig');
 savefig(1, figfiledirect );
 
-figfiledirect = strcat(directory,'/fig', figID, 'AlphavsConfigs', '.fig');
-savefig(2, figfiledirect );
-
-figfiledirect = strcat(directory,'/fig', figID, 'HitsvsConfigs', '.fig');
-savefig(3, figfiledirect );
-
+% figfiledirect = strcat(directory,'/', TestID, 'AlphavsHits', '.fig');
+% savefig(1, figfiledirect );
+% 
+% figfiledirect = strcat(directory,'/', TestID, 'AlphavsConfigs', '.fig');
+% savefig(2, figfiledirect );
+% 
+% figfiledirect = strcat(directory,'/', TestID, 'HitsvsConfigs', '.fig');
+% savefig(3, figfiledirect );
+pause(5)
+close all
 %%
 % % % % % 
 % % % % % AngleHit = [Q(:,4:5), unique_hits_when(:, 1) ]; % records which angles are hitting
@@ -389,7 +402,7 @@ Results = struct('Design_params',design,...
     'dexterity_distribution',dext_dist,...
     'service_sphere_maps',ss_map);
 %Save the Results based on the design parameters
-result_file = strcat('Design_alpha',...
+result_file = strcat(TestID ,'Design_alpha',...
     strrep(strrep(strrep(strrep(num2str(design.alpha),'.',''),'        ','_'),'___','_'),'__','_'),...
     '_n',strrep(strrep(num2str(design.n),'.',''),'  ','_'),...
     '_d',strrep(strrep(strrep(strrep(num2str(design.d),'.',''),'        ','_'),'___','_'),'__','_'));

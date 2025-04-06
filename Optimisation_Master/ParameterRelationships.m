@@ -9,7 +9,7 @@ close all;
 %% Create Directory on HPC-Drive for all the results to go into:
 addpath(pwd);
 %Create a directory name based on the current time
-directory = strcat('ParamRelationshipEval_Results',strrep(strrep(datestr(datetime),':','_'),' ','_'));
+directory = strcat('PRR_',strrep(strrep(datestr(datetime),':','_'),' ','_')); % PARAM RELATIONSHIP RESULTS
 
 %Create new directory ensure it doesn't already exist
 [~, msg, ~] = mkdir(directory);
@@ -40,12 +40,13 @@ diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 % Change the following to suit test case:
 
 RV = 'T'; % Translational Movement Only
-target = 'DE'; % Direct Extruded
+target = 'DE'; % Direct Extruded T == TARGET
 environment = 'Cyl'; % Cylinder
-samplesize = '1e3'; % DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
-TestCase1.N = 1000;
 
-TestCase1.alpha = deg2rad(5);
+samplesize = '1e3_w3d3n3'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+TestCase1.N = 1000;
+TestCase1.alpha = deg2rad(90);
 TestCase1.w = 3;
 TestCase1.d = 3;
 TestCase1.n = 3;
@@ -57,11 +58,11 @@ TestCase1.RavenLimits_tranmax = ceil(sqrt(50^2+2^2))+1; %dist_limit = 50; %radiu
 TestCase1.changingvar = 'alpha'; % Doesn't matter yet (Needs to be updated for next test phase)
 
 TestCase1.anatomies = {'VoxelData_Cyl_12mm_23Mar2025.mat';
-    'VoxelData_Cyl_15mm_23Mar2025.mat';
-    'VoxelData_Cyl_24mm_23Mar2025.mat'};
+                       'VoxelData_Cyl_15mm_23Mar2025.mat';
+                       'VoxelData_Cyl_24mm_23Mar2025.mat'};
 
 % IDs and Description Strings (Don't touch this)
-TestCase1.ID = [environment, 'N', samplesize, '_RV_', RV, '_Target_', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+TestCase1.ID = [environment,'_', 'N', samplesize, '_RV_', RV, 'T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
 TestCase1.descript = ['RV: ', RV, '   Target: ', target];
 
 %% TEST CASE 2 %%
@@ -100,7 +101,8 @@ Cases = [TestCase1, TestCase2];
 for casecase = 1:length(Cases)
 
     CurrentCase = Cases(casecase);
-
+    disp(' ')
+    disp(' ')
     disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
     disp(['Current Case: ', CurrentCase.ID])
     disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
@@ -134,23 +136,22 @@ for casecase = 1:length(Cases)
     anatomies = CurrentCase(1).anatomies;
 
 
-
-
     %% Create sub Directory on HPC-Drive for all the results to go into:
     addpath(pwd);
+
     %Create a directory name based on the current time
     TestID =  testsetup.ID;
     directory2 = strcat(TestID);
 
     %Create new directory ensure it doesn't already exist
-    [~, msg, ~] = mkdir(directory, directory2);
+    [~, msg, ~] = mkdir(directory, directory2); % [~, msg, ~] 
     pause(5)
 
     disp('Results are being saved in folder:');
     disp(directory2)
 
     %Add path to directory
-    addpath(directory2);
+    addpath(fullfile(directory, directory2));
 
     directory3 = strcat(directory, '\', directory2);
     %% DE Parameters
@@ -171,7 +172,9 @@ for casecase = 1:length(Cases)
     Costs = zeros(nPop,length(anatomies));
 
     for j = 1:length(anatomies)
+        disp(' ')
         disp('------------------------------------------------------------------------------------------------------------------')
+        disp(' ')
         % Environment setup
         Anatomyfilename = anatomies{j};
         disp('Using Anatomy file:')
@@ -251,9 +254,9 @@ for casecase = 1:length(Cases)
 
         disp('Evaluation has finished...');
         BestCost=zeros(MaxIt,1);
+        disp(' ')
+        
     end
-
-    disp(Costs)
 
     % RResults_out = struct('Results',RResults);
     % %Save the Results based on the design parameters
@@ -262,6 +265,7 @@ for casecase = 1:length(Cases)
 
 end
 
+diary off
 %End parallel loop delete the pool object
 % delete(poolobj)
 

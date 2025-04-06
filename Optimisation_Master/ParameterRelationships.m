@@ -83,6 +83,8 @@ dist_limit = 50;
 radius_limit = 4; % changes depending on cylinder used
 travelallowance = 1;
 
+
+test_setup.descript = 'RV: T&R, Target: S';
 testsetup.RavenLimits_yrot = 0; %pi/4;
 testsetup.RavenLimits_xrot = 0; %pi/4;
 testsetup.RavenLimits_tranmin = 30 ; 

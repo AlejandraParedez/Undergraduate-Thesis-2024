@@ -120,7 +120,6 @@ for ii = 1:N %(ii = 1:N,0) %% N PARFOR
           % plot_my_plot_traj(Traj, design.alpha, design.n, design.d, EntranceFrame)
           SuccessfulConfig = [SuccessfulConfig; q];
 
-
           % Keep track of successes as samples increase
           temp = ss_map|new_map;
           if (sum(ss_map(:)) == sum(temp(:))) %% CAN ONLY BE USED IN REGULAR FOR LOOP !!! 
@@ -199,9 +198,36 @@ else
 
 end
 
-%% FInal output
+%% Final output
 info_final = [Total_hits_per_angle, alphahitdiffs, Total_configs_per_angle(:, 3), diffs];
 
+%% Figures
+identifier = [V.filename, ' N: ', num2str(N), ' ', test_setup.descript]; 
+
+figure('name', 'Alpha vs Hits')
+u = 90;
+hold on
+plot(info_final(1:u,1), info_final(1:u,3))
+xlabel('alpha')
+ylabel('Hits')
+title('Alpha vs Hits')
+subtitle(identifier)
+hold off
+
+figure('name', 'Alpha vs No. Configurations')
+hold on
+yyaxis right
+plot(info_final(:,1), info_final(:,5))
+xlabel('alpha')
+ylabel('Configurations (Samples)')
+
+yyaxis left
+plot(info_final(:,1), info_final(:,6))
+xlabel('alpha')
+ylabel('Difference')
+
+subtitle(identifier)
+hold off
 
 
 
@@ -267,7 +293,6 @@ end
 % ylim([0, 648])
 % zlim([0, 72])
 % hold off
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

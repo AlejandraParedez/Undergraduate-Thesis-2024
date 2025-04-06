@@ -24,8 +24,8 @@ qrxU = q_home(1) + testsetup.RavenLimits_xrot ; %was pi/4
 qryL = q_home(2) - testsetup.RavenLimits_yrot ;
 qryU = q_home(2) + testsetup.RavenLimits_yrot ;
 %z translation;%
-qrzL = 0; %0;% 
-qrzU = testsetup.RavenLimits_tran;  % limit this such that the raven alone could reach the target directly 4mmx4mm target
+qrzL = testsetup.RavenLimits_tranmin; 
+qrzU = testsetup.RavenLimits_tranmax;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Configuration space:%
@@ -88,7 +88,7 @@ ss_map = V.sphere_maps;
 repeats = 0;
 unique_hits_when = zeros(N,1);
 no_hits = false;
-% tends = [];
+tends = [];
 %%disp('Q:')
 %%disp(Q)
 for ii = 1:N %(ii = 1:N,0) %% N PARFOR
@@ -102,7 +102,7 @@ for ii = 1:N %(ii = 1:N,0) %% N PARFOR
     %Locate voxel indices
     v = Points2Voxels(V,tend') ;
 
-
+    tends = [tends, tend];
 
     %if tend voxel is in bounds (not 0 indices) and labelled goal 
     if (~(any(v==0)) && (V.Goal_labels(v(1),v(2),v(3)) == true))
@@ -120,7 +120,6 @@ for ii = 1:N %(ii = 1:N,0) %% N PARFOR
           % plot_my_plot_traj(Traj, design.alpha, design.n, design.d, EntranceFrame)
           SuccessfulConfig = [SuccessfulConfig; q];
 
-
           % Keep track of successes as samples increase
           temp = ss_map|new_map;
           if (sum(ss_map(:)) == sum(temp(:))) %% CAN ONLY BE USED IN REGULAR FOR LOOP !!! 
@@ -136,6 +135,8 @@ for ii = 1:N %(ii = 1:N,0) %% N PARFOR
         end
     end
 end 
+
+% plot_my_plot_tend(tends, design.alpha, design.n, design.d, EntranceFrame)
 
 %% if no hits
  if isempty(SuccessfulConfig)
@@ -176,26 +177,57 @@ diffs = abs( Total_configs_per_angle(:,3) - [Total_configs_per_angle(2:end,3);N]
 %% Alpha hits
 Total_hits_per_angle = []; % TOTAL UNIQUE HITS PER ANGLE
 if no_hits == true
-    disp('there wer')
-for a = 1:1:90
+    disp('There were no successes.')
+    Total_hits_per_angle = zeros(90,1);
+    alphahitdiffs = zeros(90,1);
+else
+    for a = 1:1:90
 
-    theta_max = a*n/2; 
-    arU = deg2rad(theta_max);
+        theta_max = a*n/2;
+        arU = deg2rad(theta_max);
 
-    config_subset = [];
+        config_subset = [];
 
-    valid_configs = all(SuccessfulConfig(:,4:5) <= arU, 2);
-    config_subset = SuccessfulConfig(valid_configs, :);
+        valid_configs = all(SuccessfulConfig(:,4:5) <= arU, 2);
+        config_subset = SuccessfulConfig(valid_configs, :);
 
 
-    Total_hits_per_angle = [Total_hits_per_angle; a, rad2deg(arU), size(config_subset, 1) ];
+        Total_hits_per_angle = [Total_hits_per_angle; a, rad2deg(arU), size(config_subset, 1) ];
+    end
+    alphahitdiffs = abs(Total_hits_per_angle(:,3) - [Total_hits_per_angle(2:end, 3); 0]);
+
 end
 
-alphahitdiffs = abs(Total_hits_per_angle(:,3) - [Total_hits_per_angle(2:end, 3); 0]);
-
-%% FInal output
+%% Final output
 info_final = [Total_hits_per_angle, alphahitdiffs, Total_configs_per_angle(:, 3), diffs];
 
+%% Figures
+identifier = [V.filename, ' N: ', num2str(N), ' ', test_setup.descript]; 
+figure('name', 'alpha vs hits total')
+u =90;
+hold on
+plot(info_final(1:u,1), info_final(1:u,3))
+xlabel('alpha')
+ylabel('Hits')
+title('Alpha vs Hits')
+subtitle(identifier)
+hold off
+
+figure('name', 'alpha vs samples')
+hold on
+yyaxis right
+plot(info_final(:,1), info_final(:,5))
+xlabel('alpha')
+ylabel('samples')
+
+yyaxis left
+plot(info_final(:,1), info_final(:,6))
+xlabel('alpha')
+ylabel('diffs')
+
+% Recall uniform distribution is used to get all the reuslws
+
+hold off
 
 
 

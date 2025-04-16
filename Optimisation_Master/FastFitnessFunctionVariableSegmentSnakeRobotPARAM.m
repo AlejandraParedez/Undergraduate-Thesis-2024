@@ -234,7 +234,7 @@ hold on
 plot(info_final(1:u,1), info_final(1:u,3))
 
 yl = ylim; 
-ylim([0, yl(2)]); 
+ylim([0, 1.1*yl(2)]); 
 
 xlabel('alpha')
 ylabel('Hits')
@@ -256,7 +256,7 @@ xlabel('alpha')
 ylabel('Difference')
 
 yl = ylim; 
-ylim([0, yl(2)]); 
+ylim([0, yl(2)*1.1]); 
 
 title('Alpha vs No.Configurations')
 % subtitle(identifier)
@@ -276,7 +276,8 @@ plot(1:1:N, dexterity_oversamples, '-')
 yline(dexterity_oversamples(end),'-',{['Final Dexterity Score: ', num2str(dexterity_oversamples(end))]}, 'LabelHorizontalAlignment', 'center', 'Color', '#D95319');
 xlabel('No. Configurations')
 ylabel('Dexterity')
-
+yl = ylim; 
+ylim([0, 1.1*yl(2)]); 
 title('Dexterity vs No.Configurations')
 % subtitle(identifier)
 hold off
@@ -287,6 +288,8 @@ plot(1:1:N, unique_hit_when_cumulative, '-')
 yline(unique_hit_when_cumulative(end),'-',{['Final No. Unique Successes: ', num2str(unique_hit_when_cumulative(end))]}, 'LabelHorizontalAlignment', 'center', 'Color', '#D95319');
 xlabel('No. Configurations')
 ylabel('Hits')
+yl = ylim; 
+ylim([0, 1.1*yl(2)]); 
 title('Hits vs No.Configurations')
 % subtitle(identifier)
 hold off

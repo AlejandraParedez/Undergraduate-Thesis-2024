@@ -32,34 +32,6 @@ addpath(directory);
 %% Anatomy Voxelization:
 % 
 anatomies = {'VoxelData_CylE_22mm_27Mar2025.mat'};
-% anatomies = {'VoxelData_Cyl_30mm_23Mar2025.mat'};
-% anatomies = {'VoxelData_Cyl_6mm_23Mar2025.mat'; 
-%              'VoxelData_Cyl_9mm_23Mar2025.mat';
-%              'VoxelData_Cyl_12mm_23Mar2025.mat'; 
-%              'VoxelData_Cyl_15mm_23Mar2025.mat';
-%              'VoxelData_Cyl_18mm_23Mar2025.mat';
-%              'VoxelData_Cyl_21mm_23Mar2025.mat'; 
-%              'VoxelData_Cyl_24mm_23Mar2025.mat'; 
-%              'VoxelData_Cyl_27mm_23Mar2025.mat'; 
-%              'VoxelData_Cyl_30mm_23Mar2025.mat'};
-
-% anatomies = {'VoxelData_Cyl_30mm_23Mar2025.mat'};
-
-%
-
-% anatomies = {'VoxelData_LBox_6mm_23Mar2025.mat'; 
-%              'VoxelData_LBox_8mm_23Mar2025.mat';
-%              'VoxelData_LBox_10mm_23Mar2025.mat'; 
-%              'VoxelData_LBox_12mm_23Mar2025.mat'; 
-%              'VoxelData_LBox_14mm_23Mar2025.mat';
-%              'VoxelData_LBox_16mm_23Mar2025.mat'; 
-%              'VoxelData_LBox_18mm_23Mar2025.mat';
-%              'VoxelData_LBox_20mm_23Mar2025.mat'; 
-%              'VoxelData_LBox_22mm_23Mar2025.mat'; 
-%              'VoxelData_LBox_24mm_23Mar2025.mat'; 
-%              'VoxelData_LBox_26mm_23Mar2025.mat'}; 
-             % 'VoxelData_LBox_28mm_23Mar2025.mat'; 
-             % 'VoxelData_LBox_30mm_23Mar2025.mat'};
 
 
 sample_size = 5;
@@ -68,11 +40,6 @@ disp(sample_size)
 
 % Entrance frame
 Entranceframe = [Ry(deg2rad(-90)) [0 0 30]'; 0 0 0 1];
-
-
-% nVar=3;            % Number of Decision Variables
-%nVar=6;            % One or Two segment variables 
-%VarSize=[1 nVar];   % Decision Variables Matrix Size
 
 
 MaxIt = 1;
@@ -120,9 +87,9 @@ nPop= length(changingvar);        % Population Size
 
 
 %% Set up parallel pool
-
-poolobj = parpool('local',[2 30],'SpmdEnabled',false,'IdleTimeout',60);
-disp(poolobj)
+% 
+% poolobj = parpool('local',[2 30],'SpmdEnabled',false,'IdleTimeout',60);
+% disp(poolobj)
 
 %% Main Loop
 
@@ -222,152 +189,5 @@ disp(RResults)
 % result_file = strcat('Results');
 save(directory, 'RResults');
 
-%%
-% % %% DE Main Loop
-% % 
-% % for it=1:MaxIt
-% % 
-% %     for i=1:nPop
-% % 
-% %         x=pop(i).Position; % Get Population member gene
-% %         A=randperm(nPop); % Get a random ordering of the population
-% %         A(A==i)=[]; %Ensure the order doesn't include the current member
-% % 
-% %         a=A(1);
-% %         b=A(2);
-% %         c=A(3);
-% % 
-% %         % Mutation
-% %         %V = Xr1 + F (Xr2 - Xr3)
-% %         v = pop(a).Position + F.*(pop(b).Position - pop(c).Position);
-% % 
-% %         % rescale into bounds i.e. saturate min and max after mutation
-% %         v = rescale_design_into_bounds(v,VarMin,VarMax);
-% % 
-% %         % Crossover
-% %         u=zeros(size(x));
-% %         j0=randi([1 numel(x)]);
-% %         for j=1:numel(x)
-% %             if j==j0 || rand<=pCR
-% %                 u(j)=v(j);
-% %             else
-% %                 u(j)=x(j);
-% %             end
-% %         end
-% % 
-% %         % rescale into bounds i.e. saturate min and max after crossover
-% %         NewSol.Position=rescale_design_into_bounds(u,VarMin,VarMax);
-% % 
-% %         % Run the Fitness Function
-% %         disp(['Testing member ' num2str(i) ' of generation ' num2str(it)]);
-% %         disp('Evaluating design: ')
-% %         disp(vector2designstruct(NewSol.Position))
-% % 
-% %         %Check if the design has already been tested:
-% %         [was_tested, prior_cost, prior_time] = is_member_already_tested(NewSol.Position,Allpop,Allcost,Alltime);
-% % 
-% %         if was_tested
-% %             repeat = repeat + 1;
-% %             disp('Already Evaluated skipping recalculation')
-% %             NewSol.Cost = prior_cost;
-% %             NewSol.Time = prior_time;
-% %         else 
-% %             %Unique Design needs To be calculated
-% %             func_iter = func_iter + 1;
-% %             tic
-% %             NewSol.Cost=-1*CostFunction(vector2designstruct(NewSol.Position));
-% %             toc
-% %             NewSol.Time = toc;
-% %         end           
-% % 
-% %         disp('Dexterity score for This design was:')
-% %         disp(-1*NewSol.Cost)
-% % 
-% %         %Record New population member and data:
-% %         Allpop{i,it+1} = NewSol.Position;
-% %         Allcost{i,it+1} = NewSol.Cost;
-% %         Alltime{i,it+1} = NewSol.Time;
-% % 
-% %         %Survival of the fittest:
-% %         if NewSol.Cost<pop(i).Cost
-% %             pop(i)=NewSol;
-% % 
-% %             if pop(i).Cost<BestSol.Cost
-% %                BestSol=pop(i);
-% %             end
-% %         end
-% % 
-% %     end
-% % 
-% %     % Update Best Cost
-% %     BestCost(it)=BestSol.Cost;
-% % 
-% %     % Show Iteration Information
-% %     disp(['Iteration ' num2str(it) ' finished: Best Cost = ' num2str(-BestCost(it))]);
-% %     disp('\n');
-% % 
-% %     %Saving backup data after a generation
-% %     cd(directory);
-% %     %Create Backup results file:
-% %     BackupResults = struct('BestSol',BestSol,...
-% %         'BestCost',BestCost,...
-% %         'Max_Iterations',it,...
-% %         'populations_history',cell2mat(Allpop),...
-% %         'costs_history',cell2mat(Allcost),...
-% %         'time_history',cell2mat(Alltime));
-% %     save('Snake_Evolution_Backup','-struct','BackupResults');
-% %     cd ..
-% % end
-
-% % %% Show Results
-% % 
-% % %End parallel loop delete the pool object
-delete(poolobj)
-% % 
-% % %Closing Message:
-% % disp('Evolution time complete. The Best solution was:');
-% % disp(vector2designstruct(BestSol.Position))
-% % disp('With best Dexterity:')
-% % disp(-1*BestSol.Cost)
-% % disp('\n');
-% % 
-% % %Show some statistics:
-% % % disp('In a design space of this many designs:')
-% % % disp(Design_space)
-% % disp('Total Fitness evaluations called for evolution:')
-% % disp(nPop * (MaxIt+1))
-% % disp('Number of actual unique designs evaluated:')
-% % disp(func_iter)
-% % disp('Number of actual repeated designs:')
-% % disp(repeat)
-% % 
-% % %Create Optimal results file:
-% % OptimResults = struct('BestSol',BestSol,...
-% %     'BestCost',BestCost,...
-% %     'Max_Iterations',MaxIt,...
-% %     'populations_history',cell2mat(Allpop),...
-% %     'costs_history',cell2mat(Allcost),...
-% %     'time_history',cell2mat(Alltime));
-% % %Reverse Allpop matrix array back to cell array
-% % %mat2cell(OptimResults.populations_history,ones(1,nPop),nVar*ones(1,MaxIt+1))
-% % 
-% % %Save the Results
-% % Evolution_file = strcat(directory,' Finished_ ',strrep(strrep(datestr(datetime),':','_'),' ','_'));
-% % 
-% % %Save Evolutionresults until works:
-% % %if directory access failure retry save until works
-% % not_worked = true;
-% % cd(directory);
-% % while not_worked
-% %     try
-% %         %save(strcat(directory,'/',Evolution_file),'-struct','OptimResults');
-% %         save(Evolution_file,'-struct','OptimResults');
-% %         not_worked = false;
-% %         disp('Save succssful end of evolution')
-% %     catch
-% %         disp('Save failed retrying...')
-% %         not_worked = true;
-% %         pause(5)
-% %     end
-% % end
-% % 
+%% End parallel loop delete the pool object
+% delete(poolobj)

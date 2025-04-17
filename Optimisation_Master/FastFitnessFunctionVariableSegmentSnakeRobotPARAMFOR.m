@@ -1,4 +1,4 @@
-function [Score] = FastFitnessFunctionVariableSegmentSnakeRobotPARAMPARFOR(design,sample_size,Voxels,directory, testsetup)
+function [Score] = FastFitnessFunctionVariableSegmentSnakeRobotPARAMFOR(design,sample_size,Voxels,directory, testsetup)
 % The fitness is based on the voxelisation of the anatomy and completing a
 % dexterity calculation for that. That voxelisation needs to be done in
 % GenerateVoxelisation.m first to export the structure of voxel data for
@@ -166,7 +166,7 @@ end
 %% Create test ID
 TestID = [extractAfter(extractBefore(V.filename, ".stl"), "_"), testsetup.ID, '_n', num2str(design.n), 'd', num2str(design.d)];
 
-identifier = [extractBefore(V.filename, ".stl"), '   N:', num2str(N), '   ', testsetup.descript, '  n:', num2str(design.n), ' d:', num2str(design.d)];
+identifier = ['file: ', extractBefore(V.filename, ".stl"), '   N: ', num2str(N), '   ', testsetup.descript, '  n: ', num2str(design.n), ' d: ', num2str(design.d),  ' w: ', num2str(design.w)];
 
 %% Extract alpha sets - Size of sample spaces per alpha value
 if (no_hits == false)
@@ -238,12 +238,11 @@ if (no_hits == false)
     sgtitle(identifier, 'Interpreter', 'none')
     u = 90;
 
-    subplot(1,2,1);
+    subplot(2,2,1);
     hold on
     yline(max(info_final(1:u,3)),'--',{['Max no. of hits: ', num2str(max(info_final(1:u,3)))]}, 'LabelHorizontalAlignment', 'center', 'Color', '#D95319');
 
     plot(info_final(1:u,1), info_final(1:u,3))
-
 
     yl = ylim;
     ylim([0, 1.1*yl(2)]);
@@ -255,7 +254,7 @@ if (no_hits == false)
     hold off
     %% Alpha vs Configs
     % figure(2)
-    subplot(1,2,2);
+    subplot(2,2,3);
     hold on
     yyaxis right
     plot(info_final(:,1), info_final(:,5))
@@ -285,8 +284,14 @@ if (no_hits == false)
     ax = gca;
     ax.YAxis.Exponent = 0;
     % plot(1:1:N, dexterity_oversamples, '-')
-    plot(1:N/10000:N, dexterity_oversamples(1:N/10000:N,:), '-')
-    %%%%plot max value
+
+    plot_spacing  = N/1000;   
+    x = [1:plot_spacing:N]';
+    y =  dexterity_oversamples(1:plot_spacing:N,1);
+    [ymax, xmax] = max(dexterity_oversamples);
+
+    plot(x(:,1),y(:,1), '-')
+    plot(xmax, ymax, '*')%%%%plot max value
     yline(dexterity_oversamples(end),'-',{['Final Dexterity Score: ', num2str(dexterity_oversamples(end))]}, 'LabelHorizontalAlignment', 'center', 'Color', '#D95319');
     xlabel('No. Configurations')
     ylabel('Dexterity')
@@ -299,7 +304,8 @@ if (no_hits == false)
     subplot(2,2,4);
     hold on
     % plot(1:1:N, unique_hit_when_cumulative, '-')
-    plot(1:N/10000:N, unique_hit_when_cumulative(1:N/10000:N,:), '-')
+    y = unique_hit_when_cumulative(1:plot_spacing:N, 1);
+    plot(x(:,1), y(:,1), '-')
     yline(unique_hit_when_cumulative(end),'-',{['Final No. Unique Successes: ', num2str(unique_hit_when_cumulative(end))]}, 'LabelHorizontalAlignment', 'center', 'Color', '#D95319');
     xlabel('No. Configurations')
     ylabel('Hits')

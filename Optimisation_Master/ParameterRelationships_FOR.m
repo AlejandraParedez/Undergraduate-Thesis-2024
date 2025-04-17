@@ -207,7 +207,7 @@ environment = 'SBSE10'; % Cylinder
 
 samplesize = '5e7_w00d1n3'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-TestCase_C.N = 5*1e7;
+TestCase_C.N = 5*1e4;
 
 TestCase_C.changingvector = 1:1:5;
 
@@ -244,8 +244,8 @@ Cases = [TestCase_C]; %TestCase_A, TestCase_B];
 
 %% Set up parallel pool
 
-poolobj = parpool('local',[2 30],'SpmdEnabled',false,'IdleTimeout',60);
-disp(poolobj)
+% poolobj = parpool('local',[2 30],'SpmdEnabled',false,'IdleTimeout',60);
+% disp(poolobj)
 
 %% Select test case / MAIN
 for casecase = 1:length(Cases)
@@ -335,7 +335,7 @@ for casecase = 1:length(Cases)
         Voxels = load(Anatomyfilename,'Voxel_data');
 
         % Cost Function
-        CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobotPARAMPARFOR(design,sample_size,Voxels,directory3, testsetup);
+        CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobotPARAMFOR(design,sample_size,Voxels,directory3, testsetup);
 
         disp('Start') ;%Starting Snake Evolution Algorithm Creating Initial Population:');
 
@@ -492,7 +492,7 @@ end
 
 
 %End parallel loop delete the pool object
-delete(poolobj)
+% delete(poolobj)
 diary off
 
 % % anatomies = {'VoxelData_CylE_22mm_27Mar2025'};

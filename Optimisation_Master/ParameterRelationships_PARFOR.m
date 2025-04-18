@@ -9,7 +9,9 @@ close all;
 %% Create Directory on HPC-Drive for all the results to go into:
 addpath(pwd);
 %Create a directory name based on the current time
-directory = strcat('PRR_',strrep(strrep(datestr(datetime),':','_'),' ','_')); % PARAM RELATIONSHIP RESULTS
+directory = strcat('P_',strrep(strrep( datestr(datetime, 'dd-mm HH:MM:SS') ,':','_'),' ','_')); % PARAM RELATIONSHIP RESULTS
+% directory = strcat('PRR_',strrep(strrep( datestr(datetime)              ,':','_'),' ','_')); 
+
 
 %Create new directory ensure it doesn't already exist
 [~, msg, ~] = mkdir(directory);
@@ -162,11 +164,11 @@ diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 % TestCase_B.ID = [environment,'_', 'N', samplesize, '_RV_', RV, 'T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
 % TestCase_B.descript = ['RV: ', RV, '   Target: ', target];
 
-%% TEST CASE B %%
+%% TEST CASE Alpha %%
 
 % Change the following to suit test case:
 
-RV = 'TR'; % Translational & Rotational
+RV = 'TR'; % Translational & Rotational & Full
 target = 'SE10'; % Direct Extruded T == TARGET
 environment = 'SBSE10'; % Cylinder
 

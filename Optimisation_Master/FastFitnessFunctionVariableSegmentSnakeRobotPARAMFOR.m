@@ -166,7 +166,7 @@ end
 %% Create test ID
 TestID = [extractAfter(extractBefore(V.filename, ".stl"), "_"), testsetup.ID, '_n', num2str(design.n), 'd', num2str(design.d)];
 
-identifier = ['file: ', extractBefore(V.filename, ".stl"), '   N: ', num2str(N), '   ', testsetup.descript, '  n: ', num2str(design.n), ' d: ', num2str(design.d),  ' w: ', num2str(design.w)];
+identifier = ['File: ', extractBefore(V.filename, ".stl"), '   N: ', num2str(N), '   ', testsetup.descript, '  n: ', num2str(design.n), ' d: ', num2str(design.d),  ' w: ', num2str(design.w)];
 
 %% Extract alpha sets - Size of sample spaces per alpha value
 if (no_hits == false)

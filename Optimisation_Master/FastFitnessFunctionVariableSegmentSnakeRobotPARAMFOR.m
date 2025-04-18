@@ -62,7 +62,6 @@ for ii = 1:segments
     %tilt = 5+(k-1)*2   :seg = 2 4+2 = 6, 5+2 = 7
 end
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Load the Voxel Data about Task Space %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,8 +94,7 @@ SuccessfulConfig = [];
 %%disp(Q)
 
 timefor = tic;
-for ii = 1:N %(ii = 1:N,0) %% N PARFOR
-    
+for ii = 1:N 
     
     %for each configuration q in sampled configuration space Q
     q = Q(ii,:);  
@@ -305,7 +303,9 @@ if (no_hits == false)
     hold on
     % plot(1:1:N, unique_hit_when_cumulative, '-')
     y = unique_hit_when_cumulative(1:plot_spacing:N, 1);
+    [ymax, xmax] = max(unique_hit_when_cumulative);
     plot(x(:,1), y(:,1), '-')
+    plot(xmax, ymax, '*')%%%%plot max value
     yline(unique_hit_when_cumulative(end),'-',{['Final No. Unique Successes: ', num2str(unique_hit_when_cumulative(end))]}, 'LabelHorizontalAlignment', 'center', 'Color', '#D95319');
     xlabel('No. Configurations')
     ylabel('Hits')
@@ -417,58 +417,3 @@ end
 
 end
 
-%% Code Dump (For code currently not in use)
-% % % % % 
-% % % % % AngleHit = [Q(:,4:5), unique_hits_when(:, 1) ]; % records which angles are hitting
-% % % % % save(['N', num2str(N), 'AngleHit'], AngleHit) % will need to recalculate dexterity, can only compare same size sample sizes within samples?, try all permutations?  
-% % % % % 
-% % % % % % plot_my_plot_tend(tends, design.alpha, design.n, design.d, EntranceFrame)
-% % % % % 
-% % % % % disp(['success: ', num2str(length(SuccessfulConfig))])
-% % % % % % disp(['Unique success: ', num2str(length(SuccessfulConfig) - repeats)])
-% % % % % % uniques = length(unique(SuccessfulConfig,'rows'))
-% % % % % 
-% % % % % % Dexterity: Total unique hits / (Ntheta * Nh * No.goal voxels)
-% % % % % % disp('hits list:')
-% % % % % [x, y, z] = ind2sub(size(ss_map), find(ss_map));
-% % % % % % disp([x, y, z])
-% % % % % disp(['hits total: ', num2str(length(x))])
-% % % % % uniques = unique([x, y, z],'rows');
-% % % % % disp(['Unique hits: ', num2str(length(uniques))])
-
-
-% %% Get the plots
-% 
-% figure(8888)
-% hold on; ytickformat('%.0f'); 
-% ax = gca;
-% ax.YAxis.Exponent = 0;  
-% plot(1:1:N, sample_hit_when_cumulative, 'k-')
-% hold off
-% 
-% dexterity_oversamples = sample_hit_when_cumulative / (V.ServiceSphere_params(1)* V.ServiceSphere_params(2)*V.ServiceSphere_params(1)*V.NumberGoalVoxels );
-% figure(9999)
-% hold on; ytickformat('%.4f');
-% ax = gca;
-% ax.YAxis.Exponent = 0; 
-% plot(1:1:N, dexterity_oversamples, 'k-')
-% hold off
-% 
-% 
-% reachable = strcat(directory,'/figure', 'ReachableN', num2str(N), '.fig');
-% savefig(8888, reachable )
-% figname1 = strcat(directory,'/figure', 'Dexterity over Samples', num2str(N), '.fig');
-% savefig(9999, figname1 )
-
-
-%%
-% % Plot hits %
-% figure('Name', 'Service Sphere Map')
-% hold on
-% plot3(x,y,z, 'b.', 'LineWidth',0.5)
-% grid on 
-% grid minor
-% xlim([0, 1674])
-% ylim([0, 648])
-% zlim([0, 72])
-% hold off

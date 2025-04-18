@@ -1,7 +1,6 @@
 % Differential Evolution script
 % SnakeRaven Optimisation on HPC
 % Andrew Razjigaev 11 Feb 2021
-
 clc;
 clear;
 close all;
@@ -37,11 +36,11 @@ diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 % Change the following to suit test case:
 RV = 'F'; % Translational & Rotational & Full
 target = 'SE10'; % Side Extruded 10mm down from entrance -> T == TARGET
-environment = 'NTest_SBSE10'; % Square box INCLUDE ANY OTHER IDENTIFIER AT BEGINNING OF THIS STRING
+environment = 'NTest_SB'; % Square box INCLUDE ANY OTHER IDENTIFIER AT BEGINNING OF THIS STRING
 
 samplesize = '5e8_w1d3n3'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-TestCase_SampleSize1.N = 5*1e6;
+TestCase_SampleSize1.N = 5*1e8;
 
 TestCase_SampleSize1.changingvector = 90;
 
@@ -53,25 +52,25 @@ TestCase_SampleSize1.n = 3;
 TestCase_SampleSize1.RavenLimits_yrot = pi/4;
 TestCase_SampleSize1.RavenLimits_xrot = pi/4;
 TestCase_SampleSize1.RavenLimits_tranmin = 0;
-TestCase_SampleSize1.RavenLimits_tranmax = 80; 
+TestCase_SampleSize1.RavenLimits_tranmax = 80;
 TestCase_SampleSize1.changingvar = 'alpha'; % Doesn't matter yet (Needs to be updated for next test phase)
 
-TestCase_SampleSize1.anatomies = {'VoxelData_SBSE10_30mmw1_17Apr2025.mat'};
+TestCase_SampleSize1.anatomies = {'VoxelData_SBSE10_30mmw1_.mat'};
 
 % IDs and Description Strings (Don't touch this)
 TestCase_SampleSize1.environment = environment;
-TestCase_SampleSize1.ID = [environment,'_', 'N', samplesize, '_RV_', RV, '_T_', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+TestCase_SampleSize1.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
 TestCase_SampleSize1.descript = ['RV: ', RV, '   Target: ', target];
 
 %% TEST CASE : Sample Size 2 %% n = 3
 % Change the following to suit test case:
 RV = 'F'; % Translational & Rotational & Full
 target = 'SE20'; % Side Extruded 20mm down from entrance -> T == TARGET
-environment = 'SampleSizeTesting_SBSE20'; % Square box INCLUDE ANY OTHER IDENTIFIER AT BEGINNING OF THIS STRING
+environment = 'NTest_SB'; % Square box INCLUDE ANY OTHER IDENTIFIER AT BEGINNING OF THIS STRING
 
 samplesize = '5e8_w1d3n3'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-TestCase_SampleSize2.N = 5*1e6;
+TestCase_SampleSize2.N = 5*1e8;
 
 TestCase_SampleSize2.changingvector = 90;
 
@@ -86,22 +85,22 @@ TestCase_SampleSize2.RavenLimits_tranmin = 0;
 TestCase_SampleSize2.RavenLimits_tranmax = 80; 
 TestCase_SampleSize2.changingvar = 'alpha'; % Doesn't matter yet (Needs to be updated for next test phase)
 
-TestCase_SampleSize2.anatomies = {'VoxelData_SBSE20_30mmw1_17Apr2025.mat'};
+TestCase_SampleSize2.anatomies = {'VoxelData_SBSE20_30mmw1_.mat'};
 
 % IDs and Description Strings (Don't touch this)
 TestCase_SampleSize2.environment = environment;
-TestCase_SampleSize2.ID = [environment,'_', 'N', samplesize, '_RV_', RV, '_T_', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+TestCase_SampleSize2.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
 TestCase_SampleSize2.descript = ['RV: ', RV, '   Target: ', target];
 
 %% TEST CASE : Sample Size 3 %% n = 4
 % Change the following to suit test case:
 RV = 'F'; % Translational & Rotational & Full
 target = 'SE10'; % Side Extruded 10mm down from entrance -> T == TARGET
-environment = 'NTest_SBSE10'; % Square box INCLUDE ANY OTHER IDENTIFIER AT BEGINNING OF THIS STRING
+environment = 'NTest_SB'; % Square box INCLUDE ANY OTHER IDENTIFIER AT BEGINNING OF THIS STRING
 
 samplesize = '5e8_w1d3n4'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-TestCase_SampleSize3.N = 5*1e6;
+TestCase_SampleSize3.N = 5*1e8;
 
 TestCase_SampleSize3.changingvector = 90;
 
@@ -116,11 +115,11 @@ TestCase_SampleSize3.RavenLimits_tranmin = 0;
 TestCase_SampleSize3.RavenLimits_tranmax = 80; 
 TestCase_SampleSize3.changingvar = 'alpha'; % Doesn't matter yet (Needs to be updated for next test phase)
 
-TestCase_SampleSize3.anatomies = {'VoxelData_SBSE10_30mmw1_17Apr2025.mat'};
+TestCase_SampleSize3.anatomies = {'VoxelData_SBSE10_30mmw1_.mat'};
 
 % IDs and Description Strings (Don't touch this)
 TestCase_SampleSize3.environment = environment;
-TestCase_SampleSize3.ID = [environment,'_', 'N', samplesize, '_RV_', RV, '_T_', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+TestCase_SampleSize3.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
 TestCase_SampleSize3.descript = ['RV: ', RV, '   Target: ', target];
 
 %% 
@@ -257,7 +256,6 @@ for casecase = 1:length(Cases)
                 disp(w)
             end
             
-
             % Run the Fitness Function
             disp(['Testing member ' num2str(i) ' of generation 0']);
             disp('Evaluating design: ')
@@ -358,7 +356,6 @@ for casecase = 1:length(Cases)
     ax.YAxis.Exponent = 0;
     hold off
 
-
     figfiledirect = strcat(directory3,'/', 'Costs1', '.fig');
     savefig(4, figfiledirect );
 
@@ -369,5 +366,6 @@ for casecase = 1:length(Cases)
 
 end
 
+disp('END OF TESTING')
 diary off
 

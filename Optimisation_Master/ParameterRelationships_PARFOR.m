@@ -34,215 +34,450 @@ addpath(directory);
 %% Save diary (command window)
 diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 
-
 %% Test Cases
+%% TEST CASE : a 1 
+for foldcase = 1
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational & Full
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'a_SB'; % Square Box
 
-%% TEST CASE 1 %%
-% % Change the following to suit test case:
-% 
-% RV = 'T'; % Translational Movement Only
-% target = 'DE'; % Direct Extruded T == TARGET
-% environment = 'Cyl'; % Cylinder
-% 
-% samplesize = '1e3_w3d3n3'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
-% 
-% TestCase1.N = 1000;
-% TestCase1.alpha = deg2rad(90);
-% TestCase1.w = 3;
-% TestCase1.d = 3;
-% TestCase1.n = 3;
-% 
-% TestCase1.RavenLimits_yrot = 0; 
-% TestCase1.RavenLimits_xrot = 0; 
-% TestCase1.RavenLimits_tranmin = 0 ;
-% TestCase1.RavenLimits_tranmax = ceil(sqrt(50^2+2^2))+1; %dist_limit = 50; %radius_limit = 4; % changes depending on cylinder used % travelallowance = 1;
-% TestCase1.changingvar = 'alpha'; % Doesn't matter yet (Needs to be updated for next test phase)
-% 
-% TestCase1.anatomies = {'VoxelData_Cyl_12mm_23Mar2025.mat';
-%                        'VoxelData_Cyl_15mm_23Mar2025.mat';
-%                        'VoxelData_Cyl_24mm_23Mar2025.mat'};
-% 
-% % IDs and Description Strings (Don't touch this)
-% TestCase1.ID = [environment,'_', 'N', samplesize, '_RV_', RV, 'T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
-% TestCase1.descript = ['RV: ', RV, '   Target: ', target];
+    samplesize = '5e6_w1d3n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-%% TEST CASE 2 %%
-% RV = 'TR';
-% target = 'D';
-% environment = 'Cyl';
-% samplesize = '50e5_w3d3n00';
-% 
-% TestCase2.changingvector = 1:1:10;
-% 
-% TestCase2.alpha = deg2rad(90);
-% TestCase2.w = 3;
-% TestCase2.d = 3;
-% TestCase2.n = TestCase2.changingvector;
-% 
-% 
-% TestCase2.N = 30*1e6;
-% TestCase2.RavenLimits_yrot = pi/4;
-% TestCase2.RavenLimits_xrot = pi/4;
-% TestCase2.RavenLimits_tranmin = 30 ;
-% TestCase2.RavenLimits_tranmax = 60; %dist_limit = 50; %radius_limit = 4; % changes depending on cylinder used % travelallowance = 1;
-% TestCase2.changingvar = 'n';
-% 
-% TestCase2.anatomies = {'VoxelData_Cyl_12mm_23Mar2025.mat';
-%     'VoxelData_Cyl_15mm_23Mar2025.mat';
-%     'VoxelData_Cyl_24mm_23Mar2025.mat'};
-% 
-% % IDs and Description Strings (Don't touch this)
-% TestCase2.environment = environment;
-% TestCase2.ID = [environment,'_', 'N', samplesize, '_RV_', RV, 'T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
-% TestCase2.descript = ['RV: ', RV, '   Target: ', target];
-% 
+    TestCase_a1.N = 5*1e6;
 
-%% TEST CASE A %%
-% 
-% % Change the following to suit test case:
-% 
-% RV = 'T'; % Translational Movement Only
-% target = 'SE10'; % Direct Extruded T == TARGET
-% environment = 'SB'; % Cylinder
-% 
-% samplesize = '10e6_w3d3n3'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
-% 
-% TestCase_A.N = 10*1e2;
-% 
-% TestCase_A.alpha = deg2rad(90);
-% TestCase_A.w = 3;
-% TestCase_A.d = 3;
-% TestCase_A.n = 3;
-% 
-% TestCase_A.RavenLimits_yrot = 0; 
-% TestCase_A.RavenLimits_xrot = 0; 
-% TestCase_A.RavenLimits_tranmin = 0 ;
-% TestCase_A.RavenLimits_tranmax = 50; 
-% TestCase_A.changingvar = 'alpha'; % Doesn't matter yet (Needs to be updated for next test phase)
-% 
-% TestCase_A.anatomies = {'VoxelData_SBSE10_14mm_08Apr2025.mat';
-%                        'VoxelData_SBSE10_18mm_08Apr2025.mat';
-%                        'VoxelData_SBSE10_22mm_08Apr2025.mat';
-%                        'VoxelData_SBSE10_26mm_08Apr2025.mat'};
-% 
-% % IDs and Description Strings (Don't touch this)
-% TestCase_A.ID = [environment,'_', 'N', samplesize, '_RV_', RV, 'T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
-% TestCase_A.descript = ['RV: ', RV, '   Target: ', target];
+    TestCase_a1.changingvector = 90;
 
-%% TEST CASE A %%
-% 
-% % Change the following to suit test case:
-% 
-% RV = 'TR'; % Translational & Rotational
-% target = 'SE10'; % Direct Extruded T == TARGET
-% environment = 'SBSE10'; % Cylinder
-% 
-% samplesize = '40e6_w3d00n3'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
-% 
-% TestCase_B.N = 40*1e6;
-% 
-% TestCase_B.changingvector = 1:1:10;
-% 
-% TestCase_B.alpha = deg2rad(90);
-% TestCase_B.w = 3;
-% TestCase_B.d = TestCaseB.changingvector;
-% TestCase_B.n = 3;
-% 
-% TestCase_B.RavenLimits_yrot = pi/4;
-% TestCase_B.RavenLimits_xrot = pi/4;
-% TestCase_B.RavenLimits_tranmin = 0;
-% TestCase_B.RavenLimits_tranmax = 60; 
-% TestCase_B.changingvar = 'd'; % Doesn't matter yet (Needs to be updated for next test phase)
-% 
-% TestCase_B.anatomies = {'VoxelData_SBSE10_14mm_08Apr2025.mat';
-%                        'VoxelData_SBSE10_18mm_08Apr2025.mat';
-%                        'VoxelData_SBSE10_22mm_08Apr2025.mat';
-%                        'VoxelData_SBSE10_26mm_08Apr2025.mat'};
-% 
-% % IDs and Description Strings (Don't touch this)
-% TestCase_B.environment = environment;
-% TestCase_B.ID = [environment,'_', 'N', samplesize, '_RV_', RV, 'T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
-% TestCase_B.descript = ['RV: ', RV, '   Target: ', target];
+    TestCase_a1.alpha = deg2rad(90);
+    TestCase_a1.w = 1;
+    TestCase_a1.d = 3;
+    TestCase_a1.n = 3;
 
-%% TEST CASE Alpha %%
+    TestCase_a1.RavenLimits_yrot = pi/4;
+    TestCase_a1.RavenLimits_xrot = pi/4;
+    TestCase_a1.RavenLimits_tranmin = 0;
+    TestCase_a1.RavenLimits_tranmax = 80;
+    TestCase_a1.changingvar = 'alpha'; 
 
-% Change the following to suit test case:
+    TestCase_a1.anatomies = {'VoxelData_SBSE10_14mmw1_.mat';
+                            'VoxelData_SBSE10_18mmw1_.mat';
+                            'VoxelData_SBSE10_22mmw1_.mat';
+                            'VoxelData_SBSE10_26mmw1_.mat'
+                            'VoxelData_SBSE10_30mmw1_.mat'};
 
-RV = 'TR'; % Translational & Rotational & Full
-target = 'SE10'; % Direct Extruded T == TARGET
-environment = 'SBSE10'; % Cylinder
+    % IDs and Description Strings (Don't touch this)
+    TestCase_a1.environment = environment;
+    TestCase_a1.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_a1.descript = ['RV: ', RV, '   Target: ', target];
+end
 
-samplesize = '5e6_w3d1n00'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+%% TEST CASE : a 2 
+for foldcase = 1
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational & Full
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'a_SB'; % Square Box
 
-TestCase_B.N = 5*1e6;
+    samplesize = '5e6_w3d3n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-TestCase_B.changingvector = 1:1:10;
+    TestCase_a2.N = 5*1e6;
 
-TestCase_B.alpha = deg2rad(90);
-TestCase_B.w = 3;
-TestCase_B.d = 1;
-TestCase_B.n = TestCase_B.changingvector;
+    TestCase_a2.changingvector = 90;
 
-TestCase_B.RavenLimits_yrot = pi/4;
-TestCase_B.RavenLimits_xrot = pi/4;
-TestCase_B.RavenLimits_tranmin = 0;
-TestCase_B.RavenLimits_tranmax = 60; 
-TestCase_B.changingvar = 'n'; % Doesn't matter yet (Needs to be updated for next test phase)
+    TestCase_a2.alpha = deg2rad(90);
+    TestCase_a2.w = 3;
+    TestCase_a2.d = 3;
+    TestCase_a2.n = 3;
 
-TestCase_B.anatomies = {'VoxelData_SBSE10_14mm_08Apr2025.mat';
-                       'VoxelData_SBSE10_18mm_08Apr2025.mat';
-                       'VoxelData_SBSE10_22mm_08Apr2025.mat';
-                       'VoxelData_SBSE10_26mm_08Apr2025.mat'};
+    TestCase_a2.RavenLimits_yrot = pi/4;
+    TestCase_a2.RavenLimits_xrot = pi/4;
+    TestCase_a2.RavenLimits_tranmin = 0;
+    TestCase_a2.RavenLimits_tranmax = 80;
+    TestCase_a2.changingvar = 'alpha'; 
 
-% IDs and Description Strings (Don't touch this)
-TestCase_B.environment = environment;
-TestCase_B.ID = [environment,'_', 'N', samplesize, '_RV_', RV, '_T_', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
-TestCase_B.descript = ['RV: ', RV, '   Target: ', target];
+    TestCase_a1.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+                            'VoxelData_SBSE10_18mmw3_.mat';
+                            'VoxelData_SBSE10_22mmw3_.mat';
+                            'VoxelData_SBSE10_26mmw3_.mat'
+                            'VoxelData_SBSE10_30mmw3_.mat'};
 
-%% TEST CASE C %%
+    % IDs and Description Strings (Don't touch this)
+    TestCase_a2.environment = environment;
+    TestCase_a2.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_a2.descript = ['RV: ', RV, '   Target: ', target];
+end
 
-% Change the following to suit test case:
+%% TEST CASE : d 1 
+for foldcase = 1
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational & Full
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'd_SB'; % Square Box
 
-RV = 'TR'; % Translational & Rotational
-target = 'SE10'; % Direct Extruded T == TARGET
-environment = 'SBSE10'; % Cylinder
+    samplesize = '5e7_w3d0n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-samplesize = '5e7_w00d1n3'; % INCLUDES PARAM INFO TOO (00 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+    TestCase_d1.N = 5*1e3;
 
-TestCase_C.N = 5*1e7;
+    TestCase_d1.changingvector = 1:1:10;
 
-TestCase_C.changingvector = 1:1:5;
+    TestCase_d1.alpha = deg2rad(90);
+    TestCase_d1.w = 3;
+    TestCase_d1.d = TestCase_d1.changingvector;
+    TestCase_d1.n = 3;
 
-TestCase_C.alpha = deg2rad(90);
-TestCase_C.w = TestCase_C.changingvector;
-TestCase_C.d = 1;
-TestCase_C.n = 3; %TestCase_C.changingvector;
+    TestCase_d1.RavenLimits_yrot = pi/4;
+    TestCase_d1.RavenLimits_xrot = pi/4;
+    TestCase_d1.RavenLimits_tranmin = 0;
+    TestCase_d1.RavenLimits_tranmax = 80;
+    TestCase_d1.changingvar = 'd'; 
 
-TestCase_C.RavenLimits_yrot = pi/4;
-TestCase_C.RavenLimits_xrot = pi/4;
-TestCase_C.RavenLimits_tranmin = 0;
-TestCase_C.RavenLimits_tranmax = 60; 
-TestCase_C.changingvar = 'w'; % Doesn't matter yet (Needs to be updated for next test phase)
-% 
-TestCase_C.anatomies = {'VoxelData_SBSE10_26mmw1_13Apr2025.mat';
-                       'VoxelData_SBSE10_26mmw2_13Apr2025.mat';
-                       'VoxelData_SBSE10_26mmw3_14Apr2025.mat';
-                       'VoxelData_SBSE10_26mmw4_14Apr2025.mat';
-                       'VoxelData_SBSE10_26mmw5_14Apr2025.mat'};
+    TestCase_d1.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+                             'VoxelData_SBSE10_18mmw3_.mat';
+                             'VoxelData_SBSE10_22mmw3_.mat';
+                             'VoxelData_SBSE10_26mmw3_.mat'
+                             'VoxelData_SBSE10_30mmw3_.mat'};
 
-% TestCase_C.anatomies = {'VoxelData_SBSE10_14mmw1_13Apr2025.mat';
-%                        'VoxelData_SBSE10_14mmw2_13Apr2025.mat';
-%                        'VoxelData_SBSE10_14mmw3_13Apr2025.mat';
-%                        'VoxelData_SBSE10_14mmw4_13Apr2025.mat';
-%                        'VoxelData_SBSE10_14mmw5_13Apr2025.mat'};
+    % IDs and Description Strings (Don't touch this)
+    TestCase_d1.environment = environment;
+    TestCase_d1.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_d1.descript = ['RV: ', RV, '   Target: ', target];
+end
 
-% IDs and Description Strings (Don't touch this)
-TestCase_C.environment = environment;
-TestCase_C.ID = [environment,'_', 'N', samplesize, '_RV_', RV, '_T_', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
-TestCase_C.descript = ['RV: ', RV, '   Target: ', target];
+%% TEST CASE : w 1, Widths 14mm-environmen
+for foldcase = 1
+    % Change the following to suit test case:
 
-%% 
-Cases = [TestCase_C]; %TestCase_A, TestCase_B];
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'w_SB'; % square box
+
+    samplesize = '5e8_w0d1n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_w1.N = 5*1e8; 
+
+    TestCase_w1.changingvector = 1:1:5;
+
+    TestCase_w1.alpha = deg2rad(90);
+    TestCase_w1.w = TestCase_w1.changingvector;
+    TestCase_w1.d = 1;
+    TestCase_w1.n = 3;
+
+    TestCase_w1.RavenLimits_yrot = pi/4;
+    TestCase_w1.RavenLimits_xrot = pi/4;
+    TestCase_w1.RavenLimits_tranmin = 0;
+    TestCase_w1.RavenLimits_tranmax = 80;
+    TestCase_w1.changingvar = 'w'; 
+    %
+    TestCase_w1.anatomies = {'VoxelData_SBSE10_14mmw1_.mat';
+                             'VoxelData_SBSE10_14mmw2_.mat';
+                             'VoxelData_SBSE10_14mmw3_.mat';
+                             'VoxelData_SBSE10_14mmw4_.mat';
+                             'VoxelData_SBSE10_14mmw5_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_w1.environment = environment;
+    TestCase_w1.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_w1.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : w 2, Widths 26mm-environmen
+for foldcase = 1
+    % Change the following to suit test case:
+
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'w_SB'; % square box
+
+    samplesize = '5e8_w0d1n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_w2.N = 5*1e8; 
+
+    TestCase_w2.changingvector = 1:1:5;
+
+    TestCase_w2.alpha = deg2rad(90);
+    TestCase_w2.w = TestCase_w2.changingvector;
+    TestCase_w2.d = 1;
+    TestCase_w2.n = 3;
+
+    TestCase_w2.RavenLimits_yrot = pi/4;
+    TestCase_w2.RavenLimits_xrot = pi/4;
+    TestCase_w2.RavenLimits_tranmin = 0;
+    TestCase_w2.RavenLimits_tranmax = 80;
+    TestCase_w2.changingvar = 'w'; 
+    
+    TestCase_w2.anatomies = {'VoxelData_SBSE10_26mmw1_.mat';
+                             'VoxelData_SBSE10_26mmw2_.mat';
+                             'VoxelData_SBSE10_26mmw3_.mat';
+                             'VoxelData_SBSE10_26mmw4_.mat';
+                             'VoxelData_SBSE10_26mmw5_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_w2.environment = environment;
+    TestCase_w2.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_w2.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : n 1 
+for foldcase = 1
+    % Change the following to suit test case:
+
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'n_SB'; % square box
+
+    samplesize = '5e8_w3d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_n1.N = 5*1e8;
+
+    TestCase_n1.changingvector = 1:1:10;
+
+    TestCase_n1.alpha = deg2rad(90);
+    TestCase_n1.w = 3;
+    TestCase_n1.d = 1;
+    TestCase_n1.n = TestCase_n1.changingvector;
+
+    TestCase_n1.RavenLimits_yrot = pi/4;
+    TestCase_n1.RavenLimits_xrot = pi/4;
+    TestCase_n1.RavenLimits_tranmin = 0;
+    TestCase_n1.RavenLimits_tranmax = 80;
+    TestCase_n1.changingvar = 'n'; 
+    
+    TestCase_n1.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+                             'VoxelData_SBSE10_18mmw3_.mat';
+                             'VoxelData_SBSE10_22mmw3_.mat';
+                             'VoxelData_SBSE10_26mmw3_.mat';
+                             'VoxelData_SBSE10_30mmw3_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_n1.environment = environment;
+    TestCase_n1.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_n1.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : wd 1 
+for foldcase = 1
+    % Change the following to suit test case:
+
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'wd_SB'; % square box
+
+    samplesize = '5e8_w1d0n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_wd1.N = 5*1e8;
+
+    TestCase_wd1.changingvector = 1:1:10;
+
+    TestCase_wd1.alpha = deg2rad(90);
+    TestCase_wd1.w = 1;
+    TestCase_wd1.d = TestCase_wd1.changingvector;
+    TestCase_wd1.n = 3;
+
+    TestCase_wd1.RavenLimits_yrot = pi/4;
+    TestCase_wd1.RavenLimits_xrot = pi/4;
+    TestCase_wd1.RavenLimits_tranmin = 0;
+    TestCase_wd1.RavenLimits_tranmax = 80;
+    TestCase_wd1.changingvar = 'd'; 
+    
+    TestCase_wd1.anatomies = {'VoxelData_SBSE10_14mmw1_.mat';
+                              'VoxelData_SBSE10_18mmw1_.mat';
+                              'VoxelData_SBSE10_22mmw1_.mat';
+                              'VoxelData_SBSE10_26mmw1_.mat';
+                              'VoxelData_SBSE10_30mmw1_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_wd1.environment = environment;
+    TestCase_wd1.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_wd1.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : wd 2 
+for foldcase = 1
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'wd_SB'; % square box
+
+    samplesize = '5e8_w2d0n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_wd2.N = 5*1e8;
+
+    TestCase_wd2.changingvector = 1:1:10;
+
+    TestCase_wd2.alpha = deg2rad(90);
+    TestCase_wd2.w = 2;
+    TestCase_wd2.d = TestCase_wd2.changingvector;
+    TestCase_wd2.n = 3;
+
+    TestCase_wd2.RavenLimits_yrot = pi/4;
+    TestCase_wd2.RavenLimits_xrot = pi/4;
+    TestCase_wd2.RavenLimits_tranmin = 0;
+    TestCase_wd2.RavenLimits_tranmax = 80;
+    TestCase_wd2.changingvar = 'd'; 
+    
+    TestCase_wd2.anatomies = {'VoxelData_SBSE10_14mmw2_.mat';
+                              'VoxelData_SBSE10_18mmw2_.mat';
+                              'VoxelData_SBSE10_22mmw2_.mat';
+                              'VoxelData_SBSE10_26mmw2_.mat';
+                              'VoxelData_SBSE10_30mmw2_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_wd2.environment = environment;
+    TestCase_wd2.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_wd2.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : wd 3 
+for foldcase = 1
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'wd_SB'; % square box
+
+    samplesize = '5e8_w3d0n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_wd3.N = 5*1e8;
+
+    TestCase_wd3.changingvector = 1:1:10;
+
+    TestCase_wd3.alpha = deg2rad(90);
+    TestCase_wd3.w = 3;
+    TestCase_wd3.d = TestCase_wd3.changingvector;
+    TestCase_wd3.n = 3;
+
+    TestCase_wd3.RavenLimits_yrot = pi/4;
+    TestCase_wd3.RavenLimits_xrot = pi/4;
+    TestCase_wd3.RavenLimits_tranmin = 0;
+    TestCase_wd3.RavenLimits_tranmax = 80;
+    TestCase_wd3.changingvar = 'd'; 
+    
+    TestCase_wd3.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+                              'VoxelData_SBSE10_18mmw3_.mat';
+                              'VoxelData_SBSE10_22mmw3_.mat';
+                              'VoxelData_SBSE10_26mmw3_.mat';
+                              'VoxelData_SBSE10_30mmw3_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_wd3.environment = environment;
+    TestCase_wd3.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_wd3.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : wn 1 
+for foldcase = 1
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'wn_SB'; % square box
+
+    samplesize = '5e8_w1d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_wn1.N = 5*1e8;
+
+    TestCase_wn1.changingvector = 1:1:10;
+
+    TestCase_wn1.alpha = deg2rad(90);
+    TestCase_wn1.w = 1;
+    TestCase_wn1.d = 1;
+    TestCase_wn1.n = TestCase_wn1.changingvector;
+
+    TestCase_wn1.RavenLimits_yrot = pi/4;
+    TestCase_wn1.RavenLimits_xrot = pi/4;
+    TestCase_wn1.RavenLimits_tranmin = 0;
+    TestCase_wn1.RavenLimits_tranmax = 80;
+    TestCase_wn1.changingvar = 'n'; 
+    
+    TestCase_wn1.anatomies = {'VoxelData_SBSE10_14mmw1_.mat';
+                              'VoxelData_SBSE10_18mmw1_.mat';
+                              'VoxelData_SBSE10_22mmw1_.mat';
+                              'VoxelData_SBSE10_26mmw1_.mat';
+                              'VoxelData_SBSE10_30mmw1_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_wn1.environment = environment;
+    TestCase_wn1.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_wn1.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : wn 2 
+for foldcase = 1
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'wn_SB'; % square box
+
+    samplesize = '5e8_w2d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_wn2.N = 5*1e8;
+
+    TestCase_wn2.changingvector = 1:1:10;
+
+    TestCase_wn2.alpha = deg2rad(90);
+    TestCase_wn2.w = 2;
+    TestCase_wn2.d = 1;
+    TestCase_wn2.n = TestCase_wn2.changingvector;
+
+    TestCase_wn2.RavenLimits_yrot = pi/4;
+    TestCase_wn2.RavenLimits_xrot = pi/4;
+    TestCase_wn2.RavenLimits_tranmin = 0;
+    TestCase_wn2.RavenLimits_tranmax = 80;
+    TestCase_wn2.changingvar = 'n'; 
+    
+    TestCase_wn2.anatomies = {'VoxelData_SBSE10_14mmw2_.mat';
+                              'VoxelData_SBSE10_18mmw2_.mat';
+                              'VoxelData_SBSE10_22mmw2_.mat';
+                              'VoxelData_SBSE10_26mmw2_.mat';
+                              'VoxelData_SBSE10_30mmw2_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_wn2.environment = environment;
+    TestCase_wn2.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_wn2.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : wn 3 
+for foldcase = 1
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'wn_SB'; % square box
+
+    samplesize = '5e8_w3d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_wn3.N = 5*1e8;
+
+    TestCase_wn3.changingvector = 1:1:10;
+
+    TestCase_wn3.alpha = deg2rad(90);
+    TestCase_wn3.w = 3;
+    TestCase_wn3.d = 1;
+    TestCase_wn3.n = TestCase_wn3.changingvector;
+
+    TestCase_wn3.RavenLimits_yrot = pi/4;
+    TestCase_wn3.RavenLimits_xrot = pi/4;
+    TestCase_wn3.RavenLimits_tranmin = 0;
+    TestCase_wn3.RavenLimits_tranmax = 80;
+    TestCase_wn3.changingvar = 'n'; 
+    
+    TestCase_wn3.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+                              'VoxelData_SBSE10_18mmw3_.mat';
+                              'VoxelData_SBSE10_22mmw3_.mat';
+                              'VoxelData_SBSE10_26mmw3_.mat';
+                              'VoxelData_SBSE10_30mmw3_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_wn3.environment = environment;
+    TestCase_wn3.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_wn3.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% CASES TO BE RUN 
+Cases = [TestCase_a1, TestCase_a2, ...
+        TestCase_d1, ...
+        TestCase_w1, TestCase_w2, ...
+        TestCase_n1, ...
+        TestCase_wd1, TestCase_wd2, TestCase_wd3,...
+        TestCase_wn1, TestCase_wn2, TestCase_wn3]; 
 
 %% Set up parallel pool
 

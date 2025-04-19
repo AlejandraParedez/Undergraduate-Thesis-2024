@@ -437,6 +437,7 @@ end
 
 %% TEST CASE : wn 3 
 for foldcase = 1
+
     % Change the following to suit test case:
     RV = 'F'; % Translational & Rotational
     target = 'SE10'; % Direct Extruded T == TARGET
@@ -471,13 +472,162 @@ for foldcase = 1
     TestCase_wn3.descript = ['RV: ', RV, '   Target: ', target];
 end
 
+%% TEST CASE : nd 1 (d = 1)
+for foldcase = 1
+    
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'nd_SB'; % square box
+
+    samplesize = '5e8_w3d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_nd1.N = 5*1e8;
+
+    TestCase_nd1.changingvector = 1:1:10;
+
+    TestCase_nd1.alpha = deg2rad(90);
+    TestCase_nd1.w = 3;
+    TestCase_nd1.d = 1;
+    TestCase_nd1.n = TestCase_nd1.changingvector;
+
+    TestCase_nd1.RavenLimits_yrot = pi/4;
+    TestCase_nd1.RavenLimits_xrot = pi/4;
+    TestCase_nd1.RavenLimits_tranmin = 0;
+    TestCase_nd1.RavenLimits_tranmax = 80;
+    TestCase_nd1.changingvar = 'n'; 
+    
+    TestCase_nd1.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+                              'VoxelData_SBSE10_18mmw3_.mat';
+                              'VoxelData_SBSE10_22mmw3_.mat';
+                              'VoxelData_SBSE10_26mmw3_.mat';
+                              'VoxelData_SBSE10_30mmw3_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_nd1.environment = environment;
+    TestCase_nd1.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_nd1.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : nd 2 (d = 2)
+for foldcase = 1
+    
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'nd_SB'; % square box
+
+    samplesize = '5e8_w3d2n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_nd2.N = 5*1e8;
+
+    TestCase_nd2.changingvector = 1:1:10;
+
+    TestCase_nd2.alpha = deg2rad(90);
+    TestCase_nd2.w = 3;
+    TestCase_nd2.d = 2;
+    TestCase_nd2.n = TestCase_nd2.changingvector;
+
+    TestCase_nd2.RavenLimits_yrot = pi/4;
+    TestCase_nd2.RavenLimits_xrot = pi/4;
+    TestCase_nd2.RavenLimits_tranmin = 0;
+    TestCase_nd2.RavenLimits_tranmax = 80;
+    TestCase_nd2.changingvar = 'n'; 
+    
+    TestCase_nd2.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+                              'VoxelData_SBSE10_18mmw3_.mat';
+                              'VoxelData_SBSE10_22mmw3_.mat';
+                              'VoxelData_SBSE10_26mmw3_.mat';
+                              'VoxelData_SBSE10_30mmw3_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_nd2.environment = environment;
+    TestCase_nd2.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_nd2.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : nd 3 (d = 3)
+for foldcase = 1
+    
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'nd_SB'; % square box
+
+    samplesize = '5e8_w3d3n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_nd3.N = 5*1e8;
+
+    TestCase_nd3.changingvector = 1:1:10;
+
+    TestCase_nd3.alpha = deg2rad(90);
+    TestCase_nd3.w = 3;
+    TestCase_nd3.d = 3;
+    TestCase_nd3.n = TestCase_nd3.changingvector;
+
+    TestCase_nd3.RavenLimits_yrot = pi/4;
+    TestCase_nd3.RavenLimits_xrot = pi/4;
+    TestCase_nd3.RavenLimits_tranmin = 0;
+    TestCase_nd3.RavenLimits_tranmax = 80;
+    TestCase_nd3.changingvar = 'n'; 
+    
+    TestCase_nd3.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+                              'VoxelData_SBSE10_18mmw3_.mat';
+                              'VoxelData_SBSE10_22mmw3_.mat';
+                              'VoxelData_SBSE10_26mmw3_.mat';
+                              'VoxelData_SBSE10_30mmw3_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_nd3.environment = environment;
+    TestCase_nd3.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_nd3.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : nd 4 (d = 5)
+for foldcase = 1
+    
+    % Change the following to suit test case:
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'nd_SB'; % square box
+
+    samplesize = '5e8_w3d5n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_nd4.N = 5*1e8;
+
+    TestCase_nd4.changingvector = 1:1:10;
+
+    TestCase_nd4.alpha = deg2rad(90);
+    TestCase_nd4.w = 3;
+    TestCase_nd4.d = 5;
+    TestCase_nd4.n = TestCase_nd4.changingvector;
+
+    TestCase_nd4.RavenLimits_yrot = pi/4;
+    TestCase_nd4.RavenLimits_xrot = pi/4;
+    TestCase_nd4.RavenLimits_tranmin = 0;
+    TestCase_nd4.RavenLimits_tranmax = 80;
+    TestCase_nd4.changingvar = 'n'; 
+    
+    TestCase_nd4.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+                              'VoxelData_SBSE10_18mmw3_.mat';
+                              'VoxelData_SBSE10_22mmw3_.mat';
+                              'VoxelData_SBSE10_26mmw3_.mat';
+                              'VoxelData_SBSE10_30mmw3_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_nd4.environment = environment;
+    TestCase_nd4.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_nd4.descript = ['RV: ', RV, '   Target: ', target];
+end
+
 %% CASES TO BE RUN 
 Cases = [TestCase_a1, TestCase_a2, ...
         TestCase_d1, ...
         TestCase_w1, TestCase_w2, ...
         TestCase_n1, ...
         TestCase_wd1, TestCase_wd2, TestCase_wd3,...
-        TestCase_wn1, TestCase_wn2, TestCase_wn3]; 
+        TestCase_wn1, TestCase_wn2, TestCase_wn3, ...
+        TestCase_nd1,  TestCase_nd2,  TestCase_nd3,  TestCase_nd4]; 
 
 %% Set up parallel pool
 

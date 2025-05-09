@@ -6,10 +6,16 @@ clc;
 clear;
 close all;
 
+%% File naming
+TestType = '1';
+
+Environmentinfo = extractBefore(Voxel_data.filename, '.stl');
+dir_name = join(['SnkEvl_', TestType, '_', Environmentinfo]);
+
 %% Create Directory on HPC-Drive for all the results to go into:
 addpath(pwd);
 %Create a directory name based on the current time
-directory = strcat('Snake_Evolution_Results',strrep(strrep(datestr(datetime),':','_'),' ','_'));
+directory = strcat(dir_name,strrep(strrep(datestr(datetime),':','_'),' ','_'));
 
 %Create new directory ensure it doesn't already exist
 [~, msg, ~] = mkdir(directory);
@@ -18,7 +24,7 @@ pause(5)
 %If it already exists i.e. a message about it keeps appearing, try again until it works
 %this happens if the job was run at the same time in seconds as another evolution job
 while(~isempty(msg))
-    directory = strcat('Snake_Evolution_Results',strrep(datestr(datetime),':','_'));
+    directory = strcat(dir_name,strrep(datestr(datetime),':','_'));
     [~, msg, ~] = mkdir(directory);
     pause(3)
 end
@@ -29,17 +35,15 @@ disp(directory)
 %Add path to directory
 addpath(directory);
 
-%% Anatomy Voxelization:
-%%Anatomyfilename = 'VoxelData26May2024goodfeeling.mat'; % w = 4
-%%Anatomyfilename = 'VoxelData23Aug2024.mat';  % W = 3
-%%Anatomyfilename = 'VoxelData30Aug2024AM0653.mat';  % W = 3, 4 Targets
-%%Anatomyfilename = 'EasyTargetTest3.mat';  % Easy Target for testing
+% Save diary (command window)
+diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 
-%Anatomyfilename = 'VoxelData10x1012Jan2025.mat';  % Easy Target for testing
-Anatomyfilename = 'VoxelData_GeomA.mat';  % Easy Target for testing
+
+%% Anatomy Voxelization:
+Anatomyfilename = 'VoxelData_SBSE10_10mmw1_.mat';  % Easy Target for testing
 
 %sample_size = 8*1e6; 
-sample_size = 1*1e5; %10   %1.5*1e5; %5*1e5; %6 must be larger than 9100*(18*9) orientation patches **********************************************88
+sample_size = 1*1e5; %must be larger than 9100*(18*9) orientation patches **********************************************88
 % must be larger than 1474200
 
 disp('Using Anatomy file:')

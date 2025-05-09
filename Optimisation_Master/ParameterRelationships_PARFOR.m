@@ -34,6 +34,8 @@ addpath(directory);
 %% Save diary (command window)
 diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 
+choose_samplesize = 5*1e8;
+
 %% Test Cases
 %% TEST CASE : a 1 
 for foldcase = 1
@@ -42,9 +44,9 @@ for foldcase = 1
     target = 'SE10'; % Direct Extruded T == TARGET
     environment = 'a_SB'; % Square Box
 
-    samplesize = '5e6_w1d3n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+    samplesize = '5e8_w1d3n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_a1.N = 5*1e6;
+    TestCase_a1.N = choose_samplesize;
 
     TestCase_a1.changingvector = 90;
 
@@ -78,9 +80,9 @@ for foldcase = 1
     target = 'SE10'; % Direct Extruded T == TARGET
     environment = 'a_SB'; % Square Box
 
-    samplesize = '5e6_w3d3n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+    samplesize = '5e8_w3d3n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_a2.N = 5*1e6;
+    TestCase_a2.N = choose_samplesize;
 
     TestCase_a2.changingvector = 90;
 
@@ -95,7 +97,7 @@ for foldcase = 1
     TestCase_a2.RavenLimits_tranmax = 80;
     TestCase_a2.changingvar = 'alpha'; 
 
-    TestCase_a1.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
+    TestCase_a2.anatomies = {'VoxelData_SBSE10_14mmw3_.mat';
                             'VoxelData_SBSE10_18mmw3_.mat';
                             'VoxelData_SBSE10_22mmw3_.mat';
                             'VoxelData_SBSE10_26mmw3_.mat'
@@ -114,9 +116,9 @@ for foldcase = 1
     target = 'SE10'; % Direct Extruded T == TARGET
     environment = 'd_SB'; % Square Box
 
-    samplesize = '5e7_w3d0n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+    samplesize = '5e8_w3d0n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_d1.N = 5*1e3;
+    TestCase_d1.N = choose_samplesize;
 
     TestCase_d1.changingvector = 1:1:10;
 
@@ -143,7 +145,7 @@ for foldcase = 1
     TestCase_d1.descript = ['RV: ', RV, '   Target: ', target];
 end
 
-%% TEST CASE : w 1, Widths 14mm-environmen
+%% TEST CASE : w 1, Widths 14mm-environment SE10
 for foldcase = 1
     % Change the following to suit test case:
 
@@ -153,7 +155,7 @@ for foldcase = 1
 
     samplesize = '5e8_w0d1n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_w1.N = 5*1e8; 
+    TestCase_w1.N = choose_samplesize; 
 
     TestCase_w1.changingvector = 1:1:5;
 
@@ -180,7 +182,7 @@ for foldcase = 1
     TestCase_w1.descript = ['RV: ', RV, '   Target: ', target];
 end
 
-%% TEST CASE : w 2, Widths 26mm-environmen
+%% TEST CASE : w 2, Widths 26mm-environment SE10
 for foldcase = 1
     % Change the following to suit test case:
 
@@ -190,7 +192,7 @@ for foldcase = 1
 
     samplesize = '5e8_w0d1n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_w2.N = 5*1e8; 
+    TestCase_w2.N = choose_samplesize; 
 
     TestCase_w2.changingvector = 1:1:5;
 
@@ -217,7 +219,154 @@ for foldcase = 1
     TestCase_w2.descript = ['RV: ', RV, '   Target: ', target];
 end
 
-%% TEST CASE : n 1 
+%% TEST CASE : w 3, Widths 18mm-environment SE10
+for foldcase = 1
+    % Change the following to suit test case:
+
+    RV = 'F'; % Translational & Rotational
+    target = 'SE10'; % Direct Extruded T == TARGET
+    environment = 'w3_SB'; % square box
+
+    samplesize = '5e8_w0d1n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_w3.N = choose_samplesize; 
+
+    TestCase_w3.changingvector = 1:1:5;
+
+    TestCase_w3.alpha = deg2rad(90);
+    TestCase_w3.w = TestCase_w3.changingvector;
+    TestCase_w3.d = 1;
+    TestCase_w3.n = 3;
+
+    TestCase_w3.RavenLimits_yrot = pi/4;
+    TestCase_w3.RavenLimits_xrot = pi/4;
+    TestCase_w3.RavenLimits_tranmin = 0;
+    TestCase_w3.RavenLimits_tranmax = 80;
+    TestCase_w3.changingvar = 'w'; 
+    
+    TestCase_w3.anatomies = {'VoxelData_SBSE10_18mmw1_.mat';
+                             'VoxelData_SBSE10_18mmw2_.mat';
+                             'VoxelData_SBSE10_18mmw3_.mat';
+                             'VoxelData_SBSE10_18mmw4_.mat';
+                             'VoxelData_SBSE10_18mmw5_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_w3.environment = environment;
+    TestCase_w3.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_w3.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : w 4, Widths 14mm-environment SE20
+for foldcase = 1
+    % Change the following to suit test case:
+
+    RV = 'F'; % Translational & Rotational
+    target = 'SE20'; % Direct Extruded T == TARGET
+    environment = 'w4_SB'; % square box
+
+    samplesize = '5e8_w0d1n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_w4.N = choose_samplesize; 
+
+    TestCase_w4.changingvector = 1:1:5;
+
+    TestCase_w4.alpha = deg2rad(90);
+    TestCase_w4.w = TestCase_w4.changingvector;
+    TestCase_w4.d = 1;
+    TestCase_w4.n = 3;
+
+    TestCase_w4.RavenLimits_yrot = pi/4;
+    TestCase_w4.RavenLimits_xrot = pi/4;
+    TestCase_w4.RavenLimits_tranmin = 0;
+    TestCase_w4.RavenLimits_tranmax = 80;
+    TestCase_w4.changingvar = 'w'; 
+    
+    TestCase_w4.anatomies = {'VoxelData_SBSE20_14mmw1_.mat';
+                             'VoxelData_SBSE20_14mmw2_.mat';
+                             'VoxelData_SBSE20_14mmw3_.mat';
+                             'VoxelData_SBSE20_14mmw4_.mat';
+                             'VoxelData_SBSE20_14mmw5_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_w4.environment = environment;
+    TestCase_w4.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_w4.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : w 5, Widths 26mm-environment SE20
+for foldcase = 1
+    % Change the following to suit test case:
+
+    RV = 'F'; % Translational & Rotational
+    target = 'SE20'; % Direct Extruded T == TARGET
+    environment = 'w5_SB'; % square box
+
+    samplesize = '5e8_w0d1n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_w5.N = choose_samplesize; 
+
+    TestCase_w5.changingvector = 1:1:5;
+
+    TestCase_w5.alpha = deg2rad(90);
+    TestCase_w5.w = TestCase_w5.changingvector;
+    TestCase_w5.d = 1;
+    TestCase_w5.n = 3;
+
+    TestCase_w5.RavenLimits_yrot = pi/4;
+    TestCase_w5.RavenLimits_xrot = pi/4;
+    TestCase_w5.RavenLimits_tranmin = 0;
+    TestCase_w5.RavenLimits_tranmax = 80;
+    TestCase_w5.changingvar = 'w'; 
+    
+    TestCase_w5.anatomies = {'VoxelData_SBSE20_26mmw1_.mat';
+                             'VoxelData_SBSE20_26mmw2_.mat';
+                             'VoxelData_SBSE20_26mmw3_.mat';
+                             'VoxelData_SBSE20_26mmw4_.mat';
+                             'VoxelData_SBSE20_26mmw5_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_w5.environment = environment;
+    TestCase_w5.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_w5.descript = ['RV: ', RV, '   Target: ', target];
+end
+%% TEST CASE : w 6, Widths 18mm-environment SE20
+for foldcase = 1
+    % Change the following to suit test case:
+
+    RV = 'F'; % Translational & Rotational
+    target = 'SE20'; % Direct Extruded T == TARGET
+    environment = 'w6_SB'; % square box
+
+    samplesize = '5e8_w0d1n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_w6.N = choose_samplesize; 
+
+    TestCase_w6.changingvector = 1:1:5;
+
+    TestCase_w6.alpha = deg2rad(90);
+    TestCase_w6.w = TestCase_w6.changingvector;
+    TestCase_w6.d = 1;
+    TestCase_w6.n = 3;
+
+    TestCase_w6.RavenLimits_yrot = pi/4;
+    TestCase_w6.RavenLimits_xrot = pi/4;
+    TestCase_w6.RavenLimits_tranmin = 0;
+    TestCase_w6.RavenLimits_tranmax = 80;
+    TestCase_w6.changingvar = 'w'; 
+    
+    TestCase_w6.anatomies = {'VoxelData_SBSE20_18mmw1_.mat';
+                             'VoxelData_SBSE20_18mmw2_.mat';
+                             'VoxelData_SBSE20_18mmw3_.mat';
+                             'VoxelData_SBSE20_18mmw4_.mat';
+                             'VoxelData_SBSE20_18mmw5_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_w6.environment = environment;
+    TestCase_w6.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_w6.descript = ['RV: ', RV, '   Target: ', target];
+end
+
+%% TEST CASE : n 1 SE10
 for foldcase = 1
     % Change the following to suit test case:
 
@@ -227,7 +376,7 @@ for foldcase = 1
 
     samplesize = '5e8_w3d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_n1.N = 5*1e8;
+    TestCase_n1.N = choose_samplesize;
 
     TestCase_n1.changingvector = 1:1:10;
 
@@ -254,6 +403,43 @@ for foldcase = 1
     TestCase_n1.descript = ['RV: ', RV, '   Target: ', target];
 end
 
+%% TEST CASE : n 2 SE20
+for foldcase = 1
+    % Change the following to suit test case:
+
+    RV = 'F'; % Translational & Rotational
+    target = 'SE20'; % Direct Extruded T == TARGET
+    environment = 'n2_SB'; % square box
+
+    samplesize = '5e8_w3d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
+
+    TestCase_n2.N = choose_samplesize;
+
+    TestCase_n2.changingvector = 1:1:10;
+
+    TestCase_n2.alpha = deg2rad(90);
+    TestCase_n2.w = 3;
+    TestCase_n2.d = 1;
+    TestCase_n2.n = TestCase_n2.changingvector;
+
+    TestCase_n2.RavenLimits_yrot = pi/4;
+    TestCase_n2.RavenLimits_xrot = pi/4;
+    TestCase_n2.RavenLimits_tranmin = 0;
+    TestCase_n2.RavenLimits_tranmax = 80;
+    TestCase_n2.changingvar = 'n'; 
+    
+    TestCase_n2.anatomies = {'VoxelData_SBSE20_14mmw3_.mat';
+                             'VoxelData_SBSE20_18mmw3_.mat';
+                             'VoxelData_SBSE20_22mmw3_.mat';
+                             'VoxelData_SBSE20_26mmw3_.mat';
+                             'VoxelData_SBSE20_30mmw3_.mat'};
+
+    % IDs and Description Strings (Don't touch this)
+    TestCase_n2.environment = environment;
+    TestCase_n2.ID = [environment,'_', 'N', samplesize, '_RV', RV, '_T', target, '_']; % anatomytype_ravenlimits_Translation(andor)rotation_targettype_S or D (S = side, D = direct)
+    TestCase_n2.descript = ['RV: ', RV, '   Target: ', target];
+end
+
 %% TEST CASE : wd 1 
 for foldcase = 1
     % Change the following to suit test case:
@@ -264,7 +450,7 @@ for foldcase = 1
 
     samplesize = '5e8_w1d0n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_wd1.N = 5*1e8;
+    TestCase_wd1.N = choose_samplesize;
 
     TestCase_wd1.changingvector = 1:1:10;
 
@@ -300,7 +486,7 @@ for foldcase = 1
 
     samplesize = '5e8_w2d0n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_wd2.N = 5*1e8;
+    TestCase_wd2.N = choose_samplesize;
 
     TestCase_wd2.changingvector = 1:1:10;
 
@@ -336,7 +522,7 @@ for foldcase = 1
 
     samplesize = '5e8_w3d0n3'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_wd3.N = 5*1e8;
+    TestCase_wd3.N = choose_samplesize;
 
     TestCase_wd3.changingvector = 1:1:10;
 
@@ -372,7 +558,7 @@ for foldcase = 1
 
     samplesize = '5e8_w1d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_wn1.N = 5*1e8;
+    TestCase_wn1.N = choose_samplesize;
 
     TestCase_wn1.changingvector = 1:1:10;
 
@@ -408,7 +594,7 @@ for foldcase = 1
 
     samplesize = '5e8_w2d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_wn2.N = 5*1e8;
+    TestCase_wn2.N = choose_samplesize;
 
     TestCase_wn2.changingvector = 1:1:10;
 
@@ -445,7 +631,7 @@ for foldcase = 1
 
     samplesize = '5e8_w3d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_wn3.N = 5*1e8;
+    TestCase_wn3.N = choose_samplesize;
 
     TestCase_wn3.changingvector = 1:1:10;
 
@@ -482,7 +668,7 @@ for foldcase = 1
 
     samplesize = '5e8_w3d1n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_nd1.N = 5*1e8;
+    TestCase_nd1.N = choose_samplesize;
 
     TestCase_nd1.changingvector = 1:1:10;
 
@@ -519,7 +705,7 @@ for foldcase = 1
 
     samplesize = '5e8_w3d2n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_nd2.N = 5*1e8;
+    TestCase_nd2.N = choose_samplesize;
 
     TestCase_nd2.changingvector = 1:1:10;
 
@@ -556,7 +742,7 @@ for foldcase = 1
 
     samplesize = '5e8_w3d3n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_nd3.N = 5*1e8;
+    TestCase_nd3.N = choose_samplesize;
 
     TestCase_nd3.changingvector = 1:1:10;
 
@@ -593,7 +779,7 @@ for foldcase = 1
 
     samplesize = '5e8_w3d5n0'; % INCLUDES PARAM INFO TOO (0 to identfy changing var) &&&& DOUBLE CHECK THIS IS SAME VALUE AS N !!!!!!!!!!
 
-    TestCase_nd4.N = 5*1e8;
+    TestCase_nd4.N = choose_samplesize;
 
     TestCase_nd4.changingvector = 1:1:10;
 
@@ -621,13 +807,13 @@ for foldcase = 1
 end
 
 %% CASES TO BE RUN 
-Cases = [TestCase_a1, TestCase_a2, ...
-        TestCase_d1, ...
-        TestCase_w1, TestCase_w2, ...
-        TestCase_n1, ...
-        TestCase_wd1, TestCase_wd2, TestCase_wd3,...
-        TestCase_wn1, TestCase_wn2, TestCase_wn3, ...
-        TestCase_nd1,  TestCase_nd2,  TestCase_nd3,  TestCase_nd4]; 
+Cases = [TestCase_a1, TestCase_a2,...
+    TestCase_d1, ...
+    TestCase_w1, TestCase_w2, ...
+    TestCase_n1,  ...
+    TestCase_wd1, TestCase_wd2, TestCase_wd3, ...
+    TestCase_wn1, TestCase_wn2, TestCase_wn3, ...
+    TestCase_nd1,  TestCase_nd2,  TestCase_nd3,  TestCase_nd4]; 
 
 %% Set up parallel pool
 

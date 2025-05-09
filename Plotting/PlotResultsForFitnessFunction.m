@@ -1,4 +1,4 @@
-function PlotResultsForFitnessFunction(result_filename,Anatomyfilename)
+function PlotResultsForFitnessFunction(result_filename,Anatomyfilename, resultsfolder)
 % This function plots all data from the resulting fitness function
 % evaluation for a design
 % author: Andrew Razjigaev 2019
@@ -10,7 +10,10 @@ disp('Visualising the Fitness Function Result Data:')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Load Results:
+originaldir = pwd;
+cd(resultsfolder)
 Results = load(result_filename);
+cd(originaldir)
 
 Voxels = load(Anatomyfilename);
 V = Voxels.Voxel_data;

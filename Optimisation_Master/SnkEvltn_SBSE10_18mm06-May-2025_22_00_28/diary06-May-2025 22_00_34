@@ -1,0 +1,18 @@
+Using Anatomy file:
+VoxelData_SBSE10_18mmw3_.mat
+Configuration sample size:
+   100000000
+
+Running for 100 iterations/generations
+population size: 30
+Amplification/mutation factor: 0.5
+Crossover Probability: 0.8
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parpool')" style="font-weight:bold">parpool</a>
+Found an interactive session. You cannot have multiple
+interactive sessions open simultaneously. To terminate the
+existing session, use <a href="matlab:delete(gcp('nocreate'))">delete(gcp('nocreate'))</a>.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Evolution_script_initial_pop_edited', 'C:\Users\aleja\OneDrive - Queensland University of Technology\Documents\Undergraduate-Thesis-2024\Optimisation_Master\Evolution_script_initial_pop_edited.m', 116)" style="font-weight:bold">Evolution_script_initial_pop_edited</a> (<a href="matlab: opentoline('C:\Users\aleja\OneDrive - Queensland University of Technology\Documents\Undergraduate-Thesis-2024\Optimisation_Master\Evolution_script_initial_pop_edited.m',116,0)">line 116</a>)
+poolobj = parpool('local',[2 30],'SpmdEnabled',false,'IdleTimeout',60);
+} 
+Parallel pool using the 'Processes' profile is shutting down.

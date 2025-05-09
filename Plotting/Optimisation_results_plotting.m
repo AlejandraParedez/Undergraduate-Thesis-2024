@@ -8,12 +8,16 @@ close all;
 %% Load Data here:
 % addpath(pwd);
 % % cd('Snake2_1_10_results')
-% cd('Snake_Evolution_Results26-May-2024_14_07_33')
-tests_done = 1%0;
+originaldir = pwd;
+
+tests_done = 1;%0;
 max_iter = 100;% 200
 
 Snake = cell(tests_done,1);
-Snake{1} = 'Snake_Evolution_Results26-May-2024_14_07_33 Finished_26-May-2024_16_01_53.mat';
+
+Snake{1} = 'SnkEvltn_SBSE10_18mm07-May-2025_23_51_27 Finished_08-May-2025_05_10_35'; % free except alpha = 90 deg
+% Snake{1} = 'SnkEvltn_SBSE10_18mm07-May-2025_23_57_31 Finished_08-May-2025_02_37_36';  % Params bound according to findings
+
 % Snake{1} = 'Snake2_1_200.mat';
 Snake{2} = 'Snake2_2_200.mat';
 Snake{3} = 'Snake2_3_200.mat';
@@ -26,10 +30,14 @@ Snake{9} = 'Snake2_9_200.mat';
 Snake{10} = 'Snake2_10_200.mat';
 
 % Primary Dataset
-V = load(Snake{1}); 
+resultsfolder = 'SnkEvltn_SBSE10_18mm07-May-2025_23_51_27';% free except alpha = 90 deg
+% resultsfolder = 'SnkEvltn_SBSE10_18mm07-May-2025_23_57_31'; % Params bound according to findings
+cd(resultsfolder) 
 
+V = load(Snake{1}); 
+cd(originaldir)
 %Anatomy files
-Anatomyfilename = 'VoxelData26May2024goodfeeling.mat';
+Anatomyfilename = 'VoxelData_SBSE10_18mmw3_.mat';
 
 %% Evolution Fitness over time Plot:
 
@@ -42,10 +50,12 @@ disp('\n');
 tiledlayout(2, 3)
 
 %Plot Line of Evolution Best cost over time
-figure;
+figure
 nexttile
 for ii = 1:tests_done
+    cd(resultsfolder) 
     Data = load(Snake{ii});
+    cd(originaldir)
     plot(-1*Data.BestCost,'LineWidth', 2);
     hold on
 end
@@ -58,7 +68,9 @@ legend('Location','East');
 %Plot Mean and standard deviation range Lines of Evolution Best cost over time
 All_data = zeros(max_iter,tests_done);
 for ii = 1:tests_done
+    cd(resultsfolder) 
     Data = load(Snake{ii});
+    cd(originaldir)
     All_data(:,ii) = -1*Data.BestCost;
 end
 
@@ -101,7 +113,9 @@ if nVar==3
     alpha = zeros(tests_done,1); n = zeros(tests_done,1); d = zeros(tests_done,1);
     %Load Data
     for ii = 1:tests_done
+        cd(resultsfolder)
         Data = load(Snake{ii});
+        cd(originaldir)
         alpha(ii) = Data.BestSol.Position(1);
         n(ii) = Data.BestSol.Position(2);
         d(ii) = Data.BestSol.Position(3);
@@ -126,7 +140,9 @@ else
     alpha2 = zeros(tests_done,1); n2 = zeros(tests_done,1); d2 = zeros(tests_done,1);
     %Load Data
     for ii = 1:tests_done
+        cd(resultsfolder)
         Data = load(Snake{ii});
+        cd(originaldir)
         alpha1(ii) = Data.BestSol.Position(1);
         n1(ii) = Data.BestSol.Position(2);
         d1(ii) = Data.BestSol.Position(3);
@@ -181,7 +197,8 @@ result_file = strcat('Design_alpha',...
 
 %Plot Visualisation of design, maximum service sphere and dexterity
 %distribution
-PlotResultsForFitnessFunction(result_file,Anatomyfilename)
+PlotResultsForFitnessFunction(result_file,Anatomyfilename, resultsfolder)
+
 
 % % % %% Determine Design results for each Target needed for Hypothesis Test:
 % % % 
@@ -209,52 +226,52 @@ PlotResultsForFitnessFunction(result_file,Anatomyfilename)
 % % % save('two_seg_baseline','X');
 
 %% Conduct Comparing DOF hypothesis Tests:
-
-%Load Rigid Tool results:
-rigid = load('Rigid_tool_baseline');
-rigid_results = rigid.rigid_results;
-disp('Rigid Tool Fitness Vector')
-disp(rigid_results)
-
-%Load One DOF tool Results
-one_seg = load('one_seg_baseline');
-one_seg_results = one_seg.one_seg_results;
-disp('One Segment Design Fitness Vector')
-disp(one_seg_results)
-
-%Two Segment Results vector:
-Y = zeros(1,tests_done);
-for ii=1:tests_done
-    V = load(Snake{ii});
-    Y(ii) = -1*V.BestSol.Cost;
-end
-disp('Two Segment Design Fitness Vector')
-disp(Y)
-
-%Hypothesis Test:
-[P,H] = ranksum(rigid_results,one_seg_results,'alpha',0.01,'tail','left','method','exact');
-%[P,H] = ranksum(rigid_results,one_seg_results);
-disp(['P-value: ' num2str(P) ])
-if H
-    disp('Reject null hypothesis: significant evidence One Segment Design is better than Rigid Tool')
-else
-    disp('accept null hypothesis: no evidence of advantage with One Segment Design and Rigid Tool')
-end
-
-%[P,H] = ranksum(rigid_results,Y);
-[P,H] = ranksum(rigid_results,Y,'alpha',0.01,'tail','left','method','exact');
-disp(['P-value: ' num2str(P) ])
-if H
-    disp('Reject null hypothesis: significant evidence Two Segment Design is better than Rigid Tool')
-else
-    disp('accept null hypothesis: no evidence of advantage with Two Segment Design and Rigid Tool')
-end
-
-%[P,H] = ranksum(one_seg_results,Y);
-[P,H] = ranksum(one_seg_results,Y,'alpha',0.01,'tail','left','method','exact');
-disp(['P-value: ' num2str(P) ])
-if H
-    disp('Reject null hypothesis: significant evidence Two Segment Design is better than One Segment Design')
-else
-    disp('accept null hypothesis: no evidence of advantage with Two Segment Design and One Segment Design')
-end
+% 
+% %Load Rigid Tool results:
+% rigid = load('Rigid_tool_baseline');
+% rigid_results = rigid.rigid_results;
+% disp('Rigid Tool Fitness Vector')
+% disp(rigid_results)
+% 
+% %Load One DOF tool Results
+% one_seg = load('one_seg_baseline');
+% one_seg_results = one_seg.one_seg_results;
+% disp('One Segment Design Fitness Vector')
+% disp(one_seg_results)
+% 
+% %Two Segment Results vector:
+% Y = zeros(1,tests_done);
+% for ii=1:tests_done
+%     V = load(Snake{ii});
+%     Y(ii) = -1*V.BestSol.Cost;
+% end
+% disp('Two Segment Design Fitness Vector')
+% disp(Y)
+% 
+% %Hypothesis Test:
+% [P,H] = ranksum(rigid_results,one_seg_results,'alpha',0.01,'tail','left','method','exact');
+% %[P,H] = ranksum(rigid_results,one_seg_results);
+% disp(['P-value: ' num2str(P) ])
+% if H
+%     disp('Reject null hypothesis: significant evidence One Segment Design is better than Rigid Tool')
+% else
+%     disp('accept null hypothesis: no evidence of advantage with One Segment Design and Rigid Tool')
+% end
+% 
+% %[P,H] = ranksum(rigid_results,Y);
+% [P,H] = ranksum(rigid_results,Y,'alpha',0.01,'tail','left','method','exact');
+% disp(['P-value: ' num2str(P) ])
+% if H
+%     disp('Reject null hypothesis: significant evidence Two Segment Design is better than Rigid Tool')
+% else
+%     disp('accept null hypothesis: no evidence of advantage with Two Segment Design and Rigid Tool')
+% end
+% 
+% %[P,H] = ranksum(one_seg_results,Y);
+% [P,H] = ranksum(one_seg_results,Y,'alpha',0.01,'tail','left','method','exact');
+% disp(['P-value: ' num2str(P) ])
+% if H
+%     disp('Reject null hypothesis: significant evidence Two Segment Design is better than One Segment Design')
+% else
+%     disp('accept null hypothesis: no evidence of advantage with Two Segment Design and One Segment Design')
+% end

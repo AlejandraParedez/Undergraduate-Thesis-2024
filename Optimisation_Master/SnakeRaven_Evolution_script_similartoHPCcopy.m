@@ -152,6 +152,7 @@ repeat = 0;
 func_iter = 0;
 
 disp('Iteration 0 has started...');
+init_it_tic = tic;
 for i= 1:nPop 
 
 %     disp(['Iteration ' num2str(it) ' has started...']);
@@ -196,15 +197,18 @@ for i= 1:nPop
 end
 
 disp('Iteration 0 has finished...');
+init_it_toc = toc(init_it_tic);
 
 BestCost=zeros(MaxIt,1);
 
 %% DE Main Loop
 
 all_it_tic = tic;
-
+ind_pop_tics = size(MaxIt, 1);
 for it=1:MaxIt
 
+    init_pop_tic = tic;
+    
     disp(['Iteration ' num2str(it) ' has started...']);
 
     for i=1:nPop
@@ -299,16 +303,19 @@ for it=1:MaxIt
         'time_history',cell2mat(Alltime));
     save('Snake_Evolution_Backup','-struct','BackupResults');
     cd ..
+
+    ind_pop_tics(it,1) = toc(init_pop_tic);
 end
 
 all_it_toc = toc(all_it_tic);
-disp(join(['Total Evaluation time for ', MaxIt, ' generations:' ] ))
+disp(join(['Total Evaluation time for ', num2str(MaxIt), ' generations:' ] ))
 disp(join([ num2str(all_it_toc), ' seconds']))
 
 %% Save time data struct
-
-timestruct.TotalItTime = all_it_toc; % Time to run all generations except initialisation.
-timestruct.IndDEvalTimes = Alltime; % This is already included in backup results. Time to run the cost function!
+timestruct.init_it_time = init_it_toc;
+timestruct.total_it_time = all_it_toc; % Time to run all generations except initialisation.
+timestruct.ind_pop_eval_times = ind_pop_tics;
+timestruct.ind_D_eval_times = Alltime; % This is already included in backup results. Time to run the cost function!
 save(fullfile(directory,'TimeStruct'), 'timestruct');
 
 
@@ -355,7 +362,7 @@ while not_worked
         %save(strcat(directory,'/',Evolution_file),'-struct','OptimResults');
         save(Evolution_file,'-struct','OptimResults');
         not_worked = false;
-        disp('Save succssful end of evolution')
+        disp('Save successful end of evolution')
     catch
         disp('Save failed retrying...')
         not_worked = true;

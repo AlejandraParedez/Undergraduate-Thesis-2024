@@ -40,11 +40,9 @@ diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 
 
 %% Anatomy Voxelization:
-Anatomyfilename = 'VoxelData_SBSE10_10mmw1_.mat';  % Easy Target for testing
+Anatomyfilename = 'VoxelData_SBSE10_10mmw1_.mat';  
 
-%sample_size = 8*1e6; 
-sample_size = 1*1e5; %must be larger than 9100*(18*9) orientation patches **********************************************88
-% must be larger than 1474200
+sample_size = 1*1e5; %must be larger than 9100*(18*9) orientation patches ***********% must be larger than 1474200
 
 disp('Using Anatomy file:')
 disp(Anatomyfilename)
@@ -52,73 +50,9 @@ disp('Configuration sample size:')
 disp(sample_size)
 
 %% Problem Definition
-
 %Voxel Map
 Voxels = load(Anatomyfilename,'Voxel_data');
 
-%Entrance frame RCM is at Origin! Simple 10x10 (10), Simple 50x50 (30)
-Entranceframe = [Ry(deg2rad(-90)) [0 0 70]'; 0 0 0 1];
-
-clear global
-setGlobalfignum(100000) 
-
-%% Traj PLOT 
-%figure(figurenumber)
-figure(444444)
-hold on
-plotcoord3(Entranceframe,10,'r','g','b')
-dx = 1; dy = 1; dz = 1;
-
-%Plot Voxels
-for ii = 1:abs(Voxels.Voxel_data.XBounds(1))+abs(Voxels.Voxel_data.XBounds(2))
-    for jj = 1:abs(Voxels.Voxel_data.YBounds(1))+abs(Voxels.Voxel_data.YBounds(2))
-        for kk = 1:abs(Voxels.Voxel_data.ZBounds(1))+abs(Voxels.Voxel_data.ZBounds(2))
-            if Voxels.Voxel_data.Obstacle_labels(ii,jj,kk)==true
-                hold on
-                %Plot Obstacle Voxel
-                plotprism(Entranceframe,Voxels.Voxel_data.vx(ii), Voxels.Voxel_data.vy(jj), Voxels.Voxel_data.vz(kk),dx,dy,dz,'r')              
-            elseif Voxels.Voxel_data.Goal_labels(ii,jj,kk)==true
-                hold on
-                %Plot Goal Voxel
-                plotprism(Entranceframe,Voxels.Voxel_data.vx(ii),Voxels.Voxel_data.vy(jj),Voxels.Voxel_data.vz(kk),dx,dy,dz,'g')
-            end
-        end
-    end
-end
-hold off
-% plot3(Voxels.Voxel_data.vx, Voxels.Voxel_data.vy, Voxels.Voxel_data.vz)
-
-%% TEND PLOT 
-
-figure(333333) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-hold on
-title('End Effector Position')
-plotcoord3(Entranceframe,50,'r','g','b')
-dx = 1; dy = 1; dz = 1;
-
-%Plot Voxels
-for ii = 1:abs(Voxels.Voxel_data.XBounds(1))+abs(Voxels.Voxel_data.XBounds(2))
-    for jj = 1:abs(Voxels.Voxel_data.YBounds(1))+abs(Voxels.Voxel_data.YBounds(2))
-        for kk = 1:abs(Voxels.Voxel_data.ZBounds(1))+abs(Voxels.Voxel_data.ZBounds(2))
-
-            if Voxels.Voxel_data.Obstacle_labels(ii,jj,kk)==true
-                hold on
-                %Plot Obstacle Voxel
-                plotprism(Entranceframe,Voxels.Voxel_data.vx(ii), Voxels.Voxel_data.vy(jj), Voxels.Voxel_data.vz(kk),dx,dy,dz,'r')
-            elseif Voxels.Voxel_data.Goal_labels(ii,jj,kk)==true
-                hold on
-                %Plot Goal Voxel
-                plotprism(Entranceframe,Voxels.Voxel_data.vx(ii),Voxels.Voxel_data.vy(jj),Voxels.Voxel_data.vz(kk),dx,dy,dz,'g')
-            end
-        end
-    end
-end
-hold off
-
-
-
-
-%%
 % Cost Function
 CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobot(design,sample_size,Voxels,directory);
 

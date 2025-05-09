@@ -100,13 +100,13 @@ end
 
 %% DE Parameters
 
-MaxIt= 100;      % Maximum Number of Iterations/gnerations
+MaxIt= 3;      % Maximum Number of Iterations/gnerations
 
-nPop=10*nVar;        % Population Size
+nPop= 10; %10*nVar;        % Population Size
 
 F = 0.5;        % Amplification Factor 0 - 2
 
-pCR=0.8;        % Crossover Probability
+pCR = 0.8;        % Crossover Probability
 
 disp(['Running for ' num2str(MaxIt) ' iterations/generations'])
 disp(['population size: ' num2str(nPop)])
@@ -200,6 +200,8 @@ disp('Iteration 0 has finished...');
 BestCost=zeros(MaxIt,1);
 
 %% DE Main Loop
+
+all_it_tic = tic;
 
 for it=1:MaxIt
 
@@ -299,8 +301,18 @@ for it=1:MaxIt
     cd ..
 end
 
-%% Show Results
+all_it_toc = toc(all_it_tic);
+disp(join(['Total Evaluation time for ', MaxIt, ' generations:' ] ))
+disp(join([ num2str(all_it_toc), ' seconds']))
 
+%% Save time data struct
+
+timestruct.TotalItTime = all_it_toc; % Time to run all generations except initialisation.
+timestruct.IndDEvalTimes = Alltime; % This is already included in backup results. Time to run the cost function!
+save(fullfile(directory,'TimeStruct'), 'timestruct');
+
+
+%% Show Results
 %End parallel loop delete the pool object
 delete(poolobj)
 
@@ -350,4 +362,6 @@ while not_worked
         pause(5)
     end
 end
+
+diary off
 

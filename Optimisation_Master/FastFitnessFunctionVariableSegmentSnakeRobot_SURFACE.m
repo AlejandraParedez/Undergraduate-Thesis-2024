@@ -133,6 +133,7 @@ parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
         if (CheckCollision_surface(V,Traj)== false)
 
           Save_endeffectorpos(ii,:) = [v(1),v(2),v(3)]; %in terms of voxels
+          disp('end effector pose has been saved, a target had been hit!')
           
           %Get patch in the new map
           new_map = servicesphere_mapping(Rend,V,v);
@@ -143,7 +144,7 @@ parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
           %Update sphere maps with OR operation its parfor loop friendly
           ss_map = ss_map|new_map; 
         else
-            disp(Traj);
+%             disp(Traj);
 
         end
     end
@@ -154,16 +155,20 @@ end
 ss_map = V.sphere_maps;
 
 %% check which voxels have been hit
-disp('successconfigs')
-disp(SuccessfulConfigs)
-[~, unique_index, ~] = unique(SuccessfulConfig,'rows');
-
-hitsmap = zeros(size(V.Goal_labels));
+% disp('successconfigs')
+% disp(SuccessfulConfigs)
+[~, unique_index, ~] = unique(SuccessfulConfigs,'rows');
+disp('unique indexes:')
+disp(unique_index)
+hitsmap = zeros(size(V.Goal_labels, [1 2 3]));
 % only unique endeffectorpositions
 Save_endeffectorpos_unique = Save_endeffectorpos(unique_index, :);
+Save_endeffectorpos_unique = Save_endeffectorpos_unique(1:end-1, :)
+% disp('unique end effector poses')
+%print(Save_endeffectorpos_unique)
 
 for j = 1:length(Save_endeffectorpos_unique) %Save_endeffectorpos
-    loc = Save_endeffectorpos_unique(N,:)
+    loc = Save_endeffectorpos_unique(j,:);
     if V.Goal_labels(loc(1),loc(2),loc(3)) == true
         hitsmap(loc(1),loc(2),loc(3)) = hitsmap(loc(1),loc(2),loc(3)) + 1;
     end
@@ -195,6 +200,7 @@ dz = 1;
 for ii = 1:nx
     for jj = 1:ny
         for kk = 1:nz
+            disp(hitsmap(ii,jj,kk))
             if hitsmap(ii,jj,kk) ~= 0
                  % hitmap value to index into colormap
                 value = norm_hitmap(ii,jj,kk);

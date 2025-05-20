@@ -40,11 +40,11 @@ else
         for ii = 1:size(Voxelcoords,1)
             we_are_in_goal(ii,1) = Voxel_data.Goal_labels(Voxelcoords(ii,1),Voxelcoords(ii,2),Voxelcoords(ii,3));
         end
-        
-        disp(we_are_in_goal(:,1))
+%         disp(we_are_in_goal(:,1))
 
-        % make sure we are in no more than one goal voxel
-        if sum(we_are_in_goal) > 1
+        % make sure we are in no more than one goal voxel until the end
+        % effector
+        if sum(we_are_in_goal(1:end-1, 1)) > 1
             disp('Another goal has been hit (this is no bueno)')
             logic = true;
 

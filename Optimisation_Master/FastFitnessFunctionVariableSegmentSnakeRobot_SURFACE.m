@@ -28,7 +28,7 @@ qrxU = q_home(1);% + pi/4; %was pi/4
 qryL = q_home(2);% - pi/4;
 qryU = q_home(2);% + pi/4;
 %z translation;%
-qrzL = 30; %0;% 
+qrzL = 30-10; %0;% 
 qrzU = 50;%80 %ceil(sqrt(50^2+4^2))+1;  % limit this such that the raven alone could reach the target directly 4mmx4mm target
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -124,7 +124,7 @@ parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
 
     %if tend voxel is in bounds (not 0 indices) and labelled goal 
     if (~(any(v==0)) && (V.Goal_labels(v(1),v(2),v(3)) == true))
-        disp(q)
+%         disp(q)
         
         %Find trajectory, endeffector rotation
         [Traj,Rend,~] = ForwardKinematicsVariableSegmentTraj(EntranceFrame,tooltransform,design,q,dV,traj_length);
@@ -143,7 +143,7 @@ parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
           %Update sphere maps with OR operation its parfor loop friendly
           ss_map = ss_map|new_map; 
         else
-            disp(Traj)
+            disp(Traj);
 
         end
     end
@@ -154,15 +154,16 @@ end
 ss_map = V.sphere_maps;
 
 %% check which voxels have been hit
-
+disp('successconfigs')
+disp(SuccessfulConfigs)
 [~, unique_index, ~] = unique(SuccessfulConfig,'rows');
 
 hitsmap = zeros(size(V.Goal_labels));
 % only unique endeffectorpositions
-Save_endeffectorpos_unique = Save_endeffectorpos_unique(unique_index, :);
+Save_endeffectorpos_unique = Save_endeffectorpos(unique_index, :);
 
 for j = 1:length(Save_endeffectorpos_unique) %Save_endeffectorpos
-    loc = Save_endeffectorpos_unique(N,:);
+    loc = Save_endeffectorpos_unique(N,:)
     if V.Goal_labels(loc(1),loc(2),loc(3)) == true
         hitsmap(loc(1),loc(2),loc(3)) = hitsmap(loc(1),loc(2),loc(3)) + 1;
     end
@@ -174,12 +175,22 @@ figure(8605)
 % Normalize hitsmap to [0, 1]
 max_hit = max(hitsmap(:));
 min_hit = min(hitsmap(:));
-norm_hitmap = (hitmap - min_hit) / (max_hit - min_hit + eps); % Avoid divide-by-zero
+norm_hitmap = (hitsmap - min_hit) / (max_hit - min_hit + eps); % Avoid divide-by-zero
 cmap = jet(256);
 
-nx = length(Voxel_data.vx)-1;
-ny = length(Voxel_data.vy)-1;
-nz = length(Voxel_data.vz)-1;
+nx = length(Voxels.Voxel_data.vx)-1;
+ny = length(Voxels.Voxel_data.vy)-1;
+nz = length(Voxels.Voxel_data.vz)-1;
+vx = Voxels.Voxel_data.vx;
+vy = Voxels.Voxel_data.vy;
+vz = Voxels.Voxel_data.vz;
+
+dx = 1;
+dy = 1;
+dz = 1;
+
+% disp(hitsmap)
+% disp(sum(hitsmap))
 %Plot Voxels
 for ii = 1:nx
     for jj = 1:ny
@@ -189,17 +200,16 @@ for ii = 1:nx
                 value = norm_hitmap(ii,jj,kk);
                 cmap_idx = max(1, round(value * 255)); % Index into colormap
                 voxel_color = cmap(cmap_idx, :);  
-
                 hold on
-                plotprism(Entranceframe,vx(ii),vy(jj),vz(kk),dx,dy,dz, voxel_color)
-            elseif Voxel_data.Goal_labels(ii,jj,kk)==true
+                plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz, voxel_color)
+            elseif Voxels.Voxel_data.Goal_labels(ii,jj,kk)==true
                 hold on
                 %Plot Goal Voxel
-                plotprism(Entranceframe,vx(ii),vy(jj),vz(kk),dx,dy,dz,'k')
-            elseif Voxel_data.Obstacle_labels(ii,jj,kk)==true
+                plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz,'k')
+            elseif Voxels.Voxel_data.Obstacle_labels(ii,jj,kk)==true
                 hold on
                 %Plot Obstacle Voxel
-                plotprism(Entranceframe,vx(ii),vy(jj),vz(kk),dx,dy,dz,'r')              
+                plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz,'r')              
             end
         end
     end

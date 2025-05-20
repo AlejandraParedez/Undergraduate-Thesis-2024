@@ -30,8 +30,8 @@ else
         Extracted(ii,1) = Voxel_data.Obstacle_labels(Voxelcoords(ii,1),Voxelcoords(ii,2),Voxelcoords(ii,3));
     end
 
-    disp('sum of extracted:')
-    disp(sum(Extracted))
+%     disp('sum of extracted:')
+%     disp(sum(Extracted))
 
     if any(Extracted)
        logic = true;
@@ -40,11 +40,14 @@ else
         for ii = 1:size(Voxelcoords,1)
             we_are_in_goal(ii,1) = Voxel_data.Goal_labels(Voxelcoords(ii,1),Voxelcoords(ii,2),Voxelcoords(ii,3));
         end
+        
+        disp(we_are_in_goal(:,1))
 
         % make sure we are in no more than one goal voxel
         if sum(we_are_in_goal) > 1
-            %         disp('Another goal has been hit (this is no bueno)')
+            disp('Another goal has been hit (this is no bueno)')
             logic = true;
+
 %         else
 %             if we_are_in_goal(end,1) == 1
 %                 %save voxel coords and then sum later

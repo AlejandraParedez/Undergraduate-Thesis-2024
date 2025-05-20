@@ -65,7 +65,7 @@ VarSize=[1 nVar];   % Decision Variables Matrix Size
 % n_bounds = [2, 5];
 % d_bounds = [1, 2];
 
-alpha_bounds = [deg2rad(2) pi/2];
+alpha_bounds = [deg2rad(20) pi/2];
 n_bounds = [2 3];
 d_bounds = [1, 2]; %[1 10];
 

@@ -11,7 +11,8 @@ disp('Params bounds according to findings')
 %% Create Directory on HPC-Drive for all the results to go into:
 addpath(pwd);
 %Create a directory name based on the current time
-directory = strcat('SnkEvltn_SBSE10_18mm',strrep(strrep(datestr(datetime),':','_'),' ','_'));
+% directory = strcat('SnkEvltn_SBSE10_18mm',strrep(strrep(datestr(datetime),':','_'),' ','_'));
+directory = strcat('SURFACE',strrep(strrep(datestr(datetime),':','_'),' ','_'));
 
 %Create new directory ensure it doesn't already exist
 [~, msg, ~] = mkdir(directory);
@@ -35,10 +36,10 @@ addpath(directory);
 diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 
 
+Anatomyfilename = 'BLOCK_20May2025.mat';
+% Anatomyfilename = 'VoxelData_SBSE10_18mmw3_.mat';  % Easy Target for testing
 
-Anatomyfilename = 'VoxelData_SBSE10_18mmw3_.mat';  % Easy Target for testing
-
-sample_size = 1*1e8;   % must be larger than 9100*(18*9) orientation patches ********** i.e. must be larger than 1474200
+sample_size = 1*1e3;   % must be larger than 9100*(18*9) orientation patches ********** i.e. must be larger than 1474200
 
 
 disp('Using Anatomy file:')
@@ -52,7 +53,7 @@ disp(sample_size)
 Voxels = load(Anatomyfilename,'Voxel_data');
 
 % Cost Function
-CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobot(design,sample_size,Voxels,directory);
+CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobot_SURFACE(design,sample_size,Voxels,directory);
 
 nVar=3;            % Number of Decision Variables
 %nVar=6;            % One or Two segment variables 
@@ -60,10 +61,13 @@ nVar=3;            % Number of Decision Variables
 VarSize=[1 nVar];   % Decision Variables Matrix Size
 
 % % % % alpha n d bounds: [lower upper]
-alpha_bounds = [pi/2 pi/2];
-n_bounds = [2, 5];
-d_bounds = [1, 2];
+% alpha_bounds = [pi/2 pi/2];
+% n_bounds = [2, 5];
+% d_bounds = [1, 2];
 
+alpha_bounds = [deg2rad(2) pi/2];
+n_bounds = [2 3];
+d_bounds = [1, 2]; %[1 10];
 
 % resolution of alpha, n and d
 res = [0.01 1 0.01]; %[0.01 1 0.01];
@@ -97,7 +101,7 @@ end
 
 %% DE Parameters
 
-MaxIt= 100;      % Maximum Number of Iterations/generations
+MaxIt= 1;      % Maximum Number of Iterations/generations
 
 nPop=10*nVar;        % Population Size
 
@@ -113,8 +117,8 @@ disp(['Crossover Probability: ' num2str(pCR)])
 
 %% Set up parallel pool
 
-% poolobj = parpool('local',[2 30],'SpmdEnabled',false,'IdleTimeout',60);
-% disp(poolobj)
+poolobj = parpool('local',[2 30],'SpmdEnabled',false,'IdleTimeout',60);
+disp(poolobj)
 
 %% Initialization
 
@@ -149,20 +153,21 @@ repeat = 0;
 func_iter = 0;
 
 %% Pre-optimised designs
-num_predesigned = 1;
-pre_designs = {[pi/2, 3, 1]}; % % % [a n d] % % %
-predesigned_count = 0;
+% num_predesigned = 1;
+% pre_designs = {[pi/2, 3, 1]}; % % % [a n d] % % %
+% predesigned_count = 0;
 
 disp('Iteration 0 has started...');
 for i=1:nPop 
     % initial population within bound %unifrnd(VarMin,VarMax,VarSize);
 
-    if (num_predesigned ~= predesigned_count) %% Use pre-designed design 
-        pop(i).Position=generate_random_design(pre_designs{i},pre_designs{i});
-        predesigned_count = predesigned_count+1;
-    else
-        pop(i).Position=generate_random_design(VarMin,VarMax);
-    end
+%     if (num_predesigned ~= predesigned_count) %% Use pre-designed design 
+%         pop(i).Position=generate_random_design(pre_designs{i},pre_designs{i});
+%         predesigned_count = predesigned_count+1;
+%     else
+%         pop(i).Position=generate_random_design(VarMin,VarMax);
+%     end
+    pop(i).Position=generate_random_design(VarMin,VarMax);
 
     % Run the Fitness Function
     disp(['Testing member ' num2str(i) ' of generation 0']);
@@ -182,7 +187,7 @@ for i=1:nPop
         %Unique Design needs To be calculated
         func_iter = func_iter + 1;
         % % % % % % % % % % % % % tic
-        pop(i).Cost=-1*CostFunction(vector2designstruct(pop(i).Position, 3));
+        pop(i).Cost=-1*CostFunction(vector2designstruct(pop(i).Position, 1));
         toc
         pop(i).Time = toc;
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -45,11 +45,13 @@ else
         if sum(we_are_in_goal) > 1
             %         disp('Another goal has been hit (this is no bueno)')
             logic = true;
-        else
-            if we_are_in_goal(end,1) == 1
-                which_goals(Voxelcoords(end, :)) = which_goals(Voxelcoords(end, :))+1;
-%                 record_goals(ii, :) = Voxelcoords(end, :)
-            end
+%         else
+%             if we_are_in_goal(end,1) == 1
+%                 %save voxel coords and then sum later
+%                 endeffectorend
+%                which_goals(Voxelcoords(ii,1),Voxelcoords(ii,2),Voxelcoords(ii,3)) = which_goals(Voxelcoords(ii,1),Voxelcoords(ii,2),Voxelcoords(ii,3))+1;
+% %                 record_goals(ii, :) = Voxelcoords(end, :)
+%             end
         end
 
         

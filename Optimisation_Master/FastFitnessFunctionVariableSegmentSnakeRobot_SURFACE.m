@@ -29,7 +29,7 @@ qryL = q_home(2);% - pi/4;
 qryU = q_home(2);% + pi/4;
 %z translation;%
 qrzL = 30; %0;% 
-qrzU = ceil(sqrt(50^2+4^2))+1;  % limit this such that the raven alone could reach the target directly 4mmx4mm target
+qrzU = 50;%80 %ceil(sqrt(50^2+4^2))+1;  % limit this such that the raven alone could reach the target directly 4mmx4mm target
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Configuration space:%
@@ -107,11 +107,12 @@ ss_map = V.sphere_maps;
 repeats = 0;
 % sample_hit_when = zeros(N,1);
 SuccessfulConfigs = zeros(N, size(Q, 2));
+Save_endeffectorpos = zeros(N, 3);
 % tends = [];
 %%disp('Q:')
 %%disp(Q)
 
-for ii = 1:N %(ii = 1:N,0) %% N PARFOR
+parfor ii = 1:N %(ii = 1:N,0) %% N PARFOR
     %for each configuration q in sampled configuration space Q
     q = Q(ii,:);  
     
@@ -130,6 +131,9 @@ for ii = 1:N %(ii = 1:N,0) %% N PARFOR
 
         %Check if Trajectory is collision free as well
         if (CheckCollision_surface(V,Traj)== false)
+
+          Save_endeffectorpos(ii,:) = [v(1),v(2),v(3)]; %in terms of voxels
+          
           %Get patch in the new map
           new_map = servicesphere_mapping(Rend,V,v);
           
@@ -146,8 +150,65 @@ for ii = 1:N %(ii = 1:N,0) %% N PARFOR
 end
 
 %% CHECK IF ALL VOXELS HAVE BEEN HIT / HOW MANY HITS PER VOXEL
-ss_map = V.sphere_maps
 
+ss_map = V.sphere_maps;
+
+%% check which voxels have been hit
+
+[~, unique_index, ~] = unique(SuccessfulConfig,'rows');
+
+hitsmap = zeros(size(V.Goal_labels));
+% only unique endeffectorpositions
+Save_endeffectorpos_unique = Save_endeffectorpos_unique(unique_index, :);
+
+for j = 1:length(Save_endeffectorpos_unique) %Save_endeffectorpos
+    loc = Save_endeffectorpos_unique(N,:);
+    if V.Goal_labels(loc(1),loc(2),loc(3)) == true
+        hitsmap(loc(1),loc(2),loc(3)) = hitsmap(loc(1),loc(2),loc(3)) + 1;
+    end
+end
+
+
+%%
+figure(8605)
+% Normalize hitsmap to [0, 1]
+max_hit = max(hitsmap(:));
+min_hit = min(hitsmap(:));
+norm_hitmap = (hitmap - min_hit) / (max_hit - min_hit + eps); % Avoid divide-by-zero
+cmap = jet(256);
+
+nx = length(Voxel_data.vx)-1;
+ny = length(Voxel_data.vy)-1;
+nz = length(Voxel_data.vz)-1;
+%Plot Voxels
+for ii = 1:nx
+    for jj = 1:ny
+        for kk = 1:nz
+            if hitsmap(ii,jj,kk) ~= 0
+                 % hitmap value to index into colormap
+                value = norm_hitmap(ii,jj,kk);
+                cmap_idx = max(1, round(value * 255)); % Index into colormap
+                voxel_color = cmap(cmap_idx, :);  
+
+                hold on
+                plotprism(Entranceframe,vx(ii),vy(jj),vz(kk),dx,dy,dz, voxel_color)
+            elseif Voxel_data.Goal_labels(ii,jj,kk)==true
+                hold on
+                %Plot Goal Voxel
+                plotprism(Entranceframe,vx(ii),vy(jj),vz(kk),dx,dy,dz,'k')
+            elseif Voxel_data.Obstacle_labels(ii,jj,kk)==true
+                hold on
+                %Plot Obstacle Voxel
+                plotprism(Entranceframe,vx(ii),vy(jj),vz(kk),dx,dy,dz,'r')              
+            end
+        end
+    end
+end
+
+savefig(1, 'Surface_dexterity_map.fig');
+
+pause(6)
+close all
 %%
 
 % plot_my_plot_tend(tends, design.alpha, design.n, design.d, EntranceFrame)

@@ -66,9 +66,14 @@ nVar=3;            % Number of Decision Variables
 VarSize=[1 nVar];   % Decision Variables Matrix Size
 
 % alpha n d, bounds: [lower upper]
-alpha_bounds = [0.01 pi/2];
-n_bounds = [1 5];
-d_bounds = [1, 10]; %[1 10];
+% % alpha_bounds = [0.01 pi/2];
+% % n_bounds = [1 5];
+% % d_bounds = [1, 10]; %[1 10];
+
+
+alpha_bounds = [deg2rad(2) pi/2];
+n_bounds = [2 3];
+d_bounds = [1, 2]; %[1 10];
 w = str2num(extractAfter(extractBefore(Anatomyfilename, '_.mat'), 'w'));
 
 % resolution of alpha, n and d

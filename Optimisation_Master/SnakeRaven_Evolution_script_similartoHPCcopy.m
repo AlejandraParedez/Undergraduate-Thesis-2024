@@ -1,14 +1,15 @@
 % Differential Evolution script
 % SnakeRaven Optimisation on HPC
 % Andrew Razjigaev 11 Feb 2021
- 
+
 clc;
 clear;
 close all;
 
+Opt_time = tic;
 %% File naming
-TestType = '1';
-Anatomyfilename = 'VoxelData_SBSE10_10mmw1_.mat';  
+TestType = '2';
+Anatomyfilename = 'VoxelData_SBSE10_12mmw3_.mat';  
 
 Environmentinfo = extractAfter(extractBefore(Anatomyfilename, '_.mat'), '_');
 dir_name = join(['SnkEvl_', TestType, '_', Environmentinfo]);
@@ -43,7 +44,7 @@ diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 %% Anatomy Voxelization:
 % Anatomyfilename = 'VoxelData_SBSE10_10mmw1_.mat';  
 
-sample_size = 1*1e1; %must be larger than 9100*(18*9) orientation patches ***********% must be larger than 1474200
+sample_size = 1*1e8; %must be larger than 9100*(18*9) orientation patches ***********% must be larger than 1474200
 
 disp('Using Anatomy file:')
 disp(Anatomyfilename)
@@ -63,9 +64,9 @@ nVar=3;            % Number of Decision Variables
 VarSize=[1 nVar];   % Decision Variables Matrix Size
 
 % alpha n d, bounds: [lower upper]
-alpha_bounds = [0.01 pi/2];
+alpha_bounds = [pi/2 pi/2];
 n_bounds = [1 5];
-d_bounds = [1, 5]; %[1 10];
+d_bounds = [1, 10]; %[1 10];
 w = str2num(extractAfter(extractBefore(Anatomyfilename, '_.mat'), 'w'));
 
 % resolution of alpha, n and d
@@ -100,9 +101,9 @@ end
 
 %% DE Parameters
 
-MaxIt= 3;      % Maximum Number of Iterations/gnerations
+MaxIt= 50;      % Maximum Number of Iterations/gnerations
 
-nPop= 10; %10*nVar;        % Population Size
+nPop= 10*nVar;        % Population Size
 
 F = 0.5;        % Amplification Factor 0 - 2
 
@@ -311,13 +312,6 @@ all_it_toc = toc(all_it_tic);
 disp(join(['Total Evaluation time for ', num2str(MaxIt), ' generations:' ] ))
 disp(join([ num2str(all_it_toc), ' seconds']))
 
-%% Save time data struct
-timestruct.init_it_time = init_it_toc;
-timestruct.total_it_time = all_it_toc; % Time to run all generations except initialisation.
-timestruct.ind_pop_eval_times = ind_pop_tics;
-timestruct.ind_D_eval_times = Alltime; % This is already included in backup results. Time to run the cost function!
-save(fullfile(directory,'TimeStruct'), 'timestruct');
-
 
 %% Show Results
 %End parallel loop delete the pool object
@@ -356,6 +350,7 @@ Evolution_file = strcat(directory,' Finished_ ',strrep(strrep(datestr(datetime),
 %Save Evolutionresults until works:
 %if directory access failure retry save until works
 not_worked = true;
+
 cd(directory);
 while not_worked
     try
@@ -370,5 +365,23 @@ while not_worked
     end
 end
 
+total_Opt_time = toc(Opt_time);
+
+%% Save time data struct
+
+timestruct.init_it_time = init_it_toc;
+timestruct.total_it_time = all_it_toc; % Time to run all generations except initialisation.
+
+timestruct.range_it_eval_time = [min(ind_pop_tics), max(ind_pop_tics)];
+timestruct.average_it_eval_time = mean(ind_pop_tics);
+timestruct.ind_it_eval_times = ind_pop_tics; % time to run each pop
+
+timestruct.ind_D_eval_times = Alltime; % This is already included in backup results. Time to run the cost function!
+timestruct.total_opt_time = total_Opt_time;
+
+save(fullfile('TimeStruct'), 'timestruct');
+
+
 diary off
+
 

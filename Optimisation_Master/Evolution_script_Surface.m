@@ -52,7 +52,7 @@ disp(sample_size)
 Voxels = load(Anatomyfilename,'Voxel_data');
 
 % Cost Function
-CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobot_SURFACE(design,sample_size,Voxels,directory);
+CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobot(design,sample_size,Voxels,directory);
 
 nVar=3;            % Number of Decision Variables
 %nVar=6;            % One or Two segment variables 

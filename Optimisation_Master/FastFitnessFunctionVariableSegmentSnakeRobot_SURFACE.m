@@ -158,12 +158,12 @@ ss_map = V.sphere_maps;
 % disp('successconfigs')
 % disp(SuccessfulConfigs)
 [~, unique_index, ~] = unique(SuccessfulConfigs,'rows');
-disp('unique indexes:')
-disp(unique_index)
+% disp('unique indexes:')
+% disp(unique_index)
 hitsmap = zeros(size(V.Goal_labels, [1 2 3]));
 % only unique endeffectorpositions
 Save_endeffectorpos_unique = Save_endeffectorpos(unique_index, :);
-Save_endeffectorpos_unique = Save_endeffectorpos_unique(1:end-1, :)
+Save_endeffectorpos_unique = Save_endeffectorpos_unique(1:end-1, :);
 % disp('unique end effector poses')
 %print(Save_endeffectorpos_unique)
 
@@ -181,7 +181,9 @@ figure(8605)
 max_hit = max(hitsmap(:));
 min_hit = min(hitsmap(:));
 norm_hitmap = (hitsmap - min_hit) / (max_hit - min_hit + eps); % Avoid divide-by-zero
-cmap = jet(256);
+% sky = [linspace(0.6, 0, 256)', linspace(0.8, 0.2, 256)', linspace(1, 1, 256)'];
+colormap(flipud(summer));
+cmap = summer; % summer; % jet(256);
 
 nx = length(Voxels.Voxel_data.vx)-1;
 ny = length(Voxels.Voxel_data.vy)-1;
@@ -194,36 +196,58 @@ dx = 1;
 dy = 1;
 dz = 1;
 
+P = TransformPoints(EntranceFrame,  [vx', vy', vz']);
+X = P(:, 1);
+Y = P(:, 2);
+Z = P(:, 3);
+
 % disp(hitsmap)
-% disp(sum(hitsmap))
-%Plot Voxels
+%Plot Points (voxels require a lot of compute power, possible but let's do
+%this for now)
 for ii = 1:nx
     for jj = 1:ny
         for kk = 1:nz
             disp(hitsmap(ii,jj,kk))
             if hitsmap(ii,jj,kk) ~= 0
                  % hitmap value to index into colormap
+                P = TransformPoints(EntranceFrame,  [vx(ii), vy(jj), vz(kk)]);
+
                 value = norm_hitmap(ii,jj,kk);
                 cmap_idx = max(1, round(value * 255)); % Index into colormap
                 voxel_color = cmap(cmap_idx, :);  
                 hold on
-                plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz, voxel_color)
+                plot3(P(:, 1), P(:, 2), P(:, 3), '.', 'color', voxel_color, 'MarkerSize', 15)
+%                 plot3(vx(ii),vy(jj),vz(kk), '.', 'color', voxel_color, 'MarkerSize', 15)
+%                 plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz, voxel_color)
             elseif Voxels.Voxel_data.Goal_labels(ii,jj,kk)==true
+                P = TransformPoints(EntranceFrame,  [vx(ii), vy(jj), vz(kk)]);
                 hold on
                 %Plot Goal Voxel
-                plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz,'k')
-            elseif Voxels.Voxel_data.Obstacle_labels(ii,jj,kk)==true
-                hold on
-                %Plot Obstacle Voxel
-                plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz,'r')              
+                plot3(P(:, 1), P(:, 2), P(:, 3), 'k.', 'MarkerSize', 15)
+
+%                 plot3(vx(ii),vy(jj),vz(kk), 'k.', 'MarkerSize', 15)
+%                 plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz,'k')
+%             elseif Voxels.Voxel_data.Obstacle_labels(ii,jj,kk)==true 
+%             % Comment out because won't be able to see goal voxels within
+%             spine; also let computationally expensive
+%                 hold on
+%                 %Plot Obstacle Voxel
+%                 plot3(vx(ii),vy(jj),vz(kk), 'r.', 'MarkerSize', 15)
+% %                 plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz,'r')              
             end
         end
     end
 end
+hold on
+view([70, 50])
+colorbar;                  
+clim([min_hit max_hit])
 
-savefig(1, 'Surface_dexterity_map.fig');
+fig = figure(8605);
+savefig(fig, fullfile(directory,'Surface_dexterity_map.fig'));
+save(fullfile(directory, 'hitmap.mat'), 'hitsmap');
 
-pause(6)
+pause(1)
 close all
 %%
 

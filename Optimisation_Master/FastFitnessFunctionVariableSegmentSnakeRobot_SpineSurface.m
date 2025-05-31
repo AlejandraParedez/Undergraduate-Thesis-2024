@@ -104,10 +104,9 @@ tooltransform = txyz(0,0,3); % 5 mm straight tool on the endeffector
 ss_map = V.sphere_maps;
 SuccessfulConfigs = zeros(N, size(Q, 2));
 Save_endeffectorpos = zeros(N, 3);
-unique_hits_when = zeros(N,1);
-new_maps = cell(N, 1);
+new_maps = {}; %cell(N, 1);
 
-parfor ii = 1:N
+for ii = 1:N
     %for each configuration q in sampled configuration space Q
     q = Q(ii,:);
     
@@ -126,13 +125,18 @@ parfor ii = 1:N
         %Check if Trajectory is collision free as well
         if (CheckCollision_surface(V,Traj) == false)
 
+
+          % Record successful end effector tip position & configuration
           Save_endeffectorpos(ii,:) = [v(1),v(2),v(3)]; %in terms of voxels
           SuccessfulConfigs(ii, :) = q;
 
           %Get patch in the new map
           new_map = servicesphere_mapping(Rend,V,v);
 
-          new_maps{ii} = new_map;
+          % Record map and index (index tracks which 'time')
+          mapstruct.map = new_map;
+          mapstruct.index = ii;
+          new_maps{end+1} = mapstruct; % Save hits out of order, new_map;
 %           temp = ss_map|new_map;
 %           if (sum(ss_map(:)) == sum(temp(:))) %% CAN ONLY BE USED IN REGULAR FOR LOOP !!! 
 %               repeats = repeats + 1;
@@ -140,7 +144,6 @@ parfor ii = 1:N
 %           else
 %               unique_hits_when(ii,1) = 1;
 %           end
-
 
           %Update sphere maps with OR operation its parfor loop friendly
           ss_map = ss_map|new_map;
@@ -151,22 +154,44 @@ parfor ii = 1:N
 end
 
 temp = V.sphere_maps;
-for a = 1:N
-    disp('any new map = ')
-    any(new_maps{a})
-    if (~isempty(new_maps{a})) %  check there is something in here
-        disp('pause')
-        check = temp|new_maps{a};
-        if (sum(temp(:)) == sum(check(:))) %% CAN ONLY BE USED IN REGULAR FOR LOOP !!!
-            unique_hits_when(a,1) = 0;
-        else
-            unique_hits_when(a,1) = 1;
-        end
-        temp = temp|new_maps{a};
-    end
-    
 
-end 
+% Reorder hits to be in order of index (N)
+hitsoutoforder = cellfun(@(a) a.index, new_maps);
+[h, hitsinorder_index] = sort(hitsoutoforder);
+new_maps = new_maps(hitsinorder_index
+
+%keep track of when unique hit has occured
+unique_hits_when = zeros(size(new_maps,2),1); 
+
+% Not a very efficient way of processing this but works
+for a = 1:size(new_maps, 2)
+    curr = new_maps{a};
+    check = temp|curr.map;
+    if (sum(temp(:)) == sum(check(:))) %% had new hit occured?
+        unique_hits_when(a,1) = 0;
+    else
+        unique_hits_when(a,1) = 1;
+    end
+    temp = temp|curr.map; % update map
+end
+
+% for a = 1:N
+%     disp('any new map = ')
+% %     any(new_maps{a})
+% %     if (~isempty(new_maps{a})) %  check there is something in here
+%         disp('pause')
+%         curr = new_maps{a}
+%         check = temp|curr.map;
+%         if (sum(temp(:)) == sum(check(:))) %% CAN ONLY BE USED IN REGULAR FOR LOOP !!!
+%             unique_hits_when(a,1) = 0;
+%         else
+%             unique_hits_when(a,1) = 1;
+%         end
+%         temp = temp|new_maps{a};
+% %     end
+%     
+% 
+% end 
 
 %           if (sum(ss_map(:)) == sum(temp(:))) %% CAN ONLY BE USED IN REGULAR FOR LOOP !!! 
 %               repeats = repeats + 1;
@@ -176,12 +201,13 @@ end
 %           end
 
 
-%% Unique hits: check which voxels have been hit and ensure there are no repeats
+%% Check which voxels have been hit 
 % [~, unique_index, ~] = unique(SuccessfulConfigs,'rows');
 hitsmap = zeros(size(V.Goal_labels, [1 2 3])); %% Store 'heat map' of hits
-indexs = find(unique_hits_when == 1)
+% indexs = h; %find(unique_hits_when == 1)
+
 % Save_endeffectorpos_unique = Save_endeffectorpos(unique_index, :); 
-Save_endeffectorpos_unique = Save_endeffectorpos(indexs, :); 
+Save_endeffectorpos_unique = Save_endeffectorpos(h, :); 
 
 Save_endeffectorpos_unique = Save_endeffectorpos_unique(1:end-1, :); 
 
@@ -192,6 +218,7 @@ for j = 1:length(Save_endeffectorpos_unique) %Save_endeffectorpos
     end
 end
 %%
+disp('pauseeee')
 figure(8605)
 % Normalize hitsmap to [0, 1]
 max_hit = max(hitsmap(:));
@@ -212,11 +239,11 @@ dx = 1; dy = 1; dz = 1;
 
 %Plot Points (voxels require a lot of compute power, possible but let's do
 %this for now)
-for ii = 1:nx
-    for jj = 1:ny
-        for kk = 1:nz
+for ii = 1:2:nx
+    for jj = 1:2:ny
+        for kk = 1:2:nz
 %             disp(hitsmap(ii,jj,kk))
-            if hitsmap(ii,jj,kk) ~= 0
+            %if hitsmap(ii,jj,kk) ~= 0
                  % hitmap value to index into colormap
                 P = TransformPoints(EntranceFrame,  [vx(ii), vy(jj), vz(kk)]);
 
@@ -224,14 +251,14 @@ for ii = 1:nx
                 cmap_idx = max(1, round(value * 255)); % Index into colormap
                 voxel_color = cmap(cmap_idx, :);  
                 hold on
-                plot3(P(:, 1), P(:, 2), P(:, 3), '.', 'color', voxel_color, 'MarkerSize', 15)
+                plot3(P(:, 1), P(:, 2), P(:, 3), '.', 'color', voxel_color, 'MarkerSize', 1)
 %                 plot3(vx(ii),vy(jj),vz(kk), '.', 'color', voxel_color, 'MarkerSize', 15)
 %                 plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz, voxel_color)
-            elseif Voxels.Voxel_data.Goal_labels(ii,jj,kk)==true
-                P = TransformPoints(EntranceFrame,  [vx(ii), vy(jj), vz(kk)]);
-                hold on
-                %Plot Goal Voxel
-                plot3(P(:, 1), P(:, 2), P(:, 3), 'k.', 'MarkerSize', 15)
+%             elseif Voxels.Voxel_data.Goal_labels(ii,jj,kk)==true
+%                 P = TransformPoints(EntranceFrame,  [vx(ii), vy(jj), vz(kk)]);
+%                 hold on
+%                 %Plot Goal Voxel
+%                 plot3(P(:, 1), P(:, 2), P(:, 3), 'k.', 'MarkerSize', 15)
 
 %                 plot3(vx(ii),vy(jj),vz(kk), 'k.', 'MarkerSize', 15)
 %                 plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz,'k')
@@ -242,22 +269,22 @@ for ii = 1:nx
 %                 %Plot Obstacle Voxel
 %                 plot3(vx(ii),vy(jj),vz(kk), 'r.', 'MarkerSize', 15)
 % %                 plotprism(EntranceFrame,vx(ii),vy(jj),vz(kk),dx,dy,dz,'r')              
-            end
+          %  end
         end
     end
 end
-
+% % % % % 
 hold on
 view([70, 50])
 colorbar;                  
 clim([min_hit max_hit])
-fig = figure(8605);
-
-savefig(fig, fullfile(directory,'Surface_dexterity_map.fig'));
-save(fullfile(directory, 'hitmap.mat'), 'hitsmap');
+% % % % % fig = figure(8605);
+% % % % % 
+% % % % % savefig(fig, fullfile(directory,'Surface_dexterity_map.fig'));
+% % % % % save(fullfile(directory, 'hitmap.mat'), 'hitsmap');
 
 pause(1)
-close all
+% close all
 
 %%
 

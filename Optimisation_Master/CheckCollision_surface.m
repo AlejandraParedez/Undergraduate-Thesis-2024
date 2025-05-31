@@ -13,8 +13,6 @@ Points = TransformPoints(Voxel_data.Baseframe2origin,points');
 %Find corresponding Voxels: Points = [x, y, z] -> Voxel = [ii, jj, kk]
 [Voxelcoords] = Points2Voxels(Voxel_data,Points);
 
-which_goals = size(Voxel_data.Goal_labels);
-
 if any(Voxelcoords(:)==0)
     %Its outside the Voxel space bounds
     logic = true;
@@ -44,17 +42,10 @@ else
 
         % make sure we are in no more than one goal voxel until the end
         % effector
-        if sum(we_are_in_goal(1:end-1, 1)) > 1
-            disp('Another goal has been hit (this is no bueno)')
+        if sum(we_are_in_goal(1:end-2, 1)) > 0
+%             disp('Another goal has been hit (this is no bueno)')
             logic = true;
 
-%         else
-%             if we_are_in_goal(end,1) == 1
-%                 %save voxel coords and then sum later
-%                 endeffectorend
-%                which_goals(Voxelcoords(ii,1),Voxelcoords(ii,2),Voxelcoords(ii,3)) = which_goals(Voxelcoords(ii,1),Voxelcoords(ii,2),Voxelcoords(ii,3))+1;
-% %                 record_goals(ii, :) = Voxelcoords(end, :)
-%             end
         end
 
         

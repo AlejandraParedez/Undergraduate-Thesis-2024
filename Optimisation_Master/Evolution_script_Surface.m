@@ -39,7 +39,7 @@ diary( strcat( directory, '/', 'diary', strrep(datestr(datetime),':','_')) )
 Anatomyfilename = 'BLOCK_20May2025.mat';
 % Anatomyfilename = 'VoxelData_SBSE10_18mmw3_.mat';  % Easy Target for testing
 
-sample_size = 5*1e3;   % must be larger than 9100*(18*9) orientation patches ********** i.e. must be larger than 1474200
+sample_size = 9*1e3;   % must be larger than 9100*(18*9) orientation patches ********** i.e. must be larger than 1474200
 
 
 disp('Using Anatomy file:')
@@ -53,7 +53,7 @@ disp(sample_size)
 Voxels = load(Anatomyfilename,'Voxel_data');
 
 % Cost Function
-CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobot_SURFACE(design,sample_size,Voxels,directory);
+CostFunction=@(design) FastFitnessFunctionVariableSegmentSnakeRobot_SpineSurface(design,sample_size,Voxels,directory);
 
 nVar=3;            % Number of Decision Variables
 %nVar=6;            % One or Two segment variables 

@@ -19,6 +19,7 @@ T = [Rx(deg2rad(180))*Ry(deg2rad(180))*Rz(deg2rad(90)) [25 3 -80]'; 0 0 0 1]; % 
 
 fv.vertices = TransformPoints(T,fv.vertices); 
 
+%% Plot Vertices
 figure('Name','Task Space','units','normalized','outerposition',[0 0 1 1])
 plot3(fv.vertices(:,1), fv.vertices(:,2), fv.vertices(:,3), '.');
 

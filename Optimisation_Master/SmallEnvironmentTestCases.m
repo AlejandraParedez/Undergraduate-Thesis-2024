@@ -1,3 +1,9 @@
+% The following are test set ups for the parameter sensitivity analysis
+% These may be used within the ParameterRelationships_PARFOR.m or
+% ParameterRelationships_FOR.m scripts.
+
+
+
 %% S for small environments and reduced n count
 
 % %% TEST CASE : w S1, Widths 12mm-environment SE10 
